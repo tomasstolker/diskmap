@@ -18,19 +18,20 @@ Scattered light mapping of protoplanetary disks.
 Installation
 ------------
 
-Installation is possible from the |pypi|:
+Installation from PyPI:
 
 .. code-block:: console
 
     $ pip install diskmap
 
-Or by cloning the Github repository:
+Installation from Github:
 
 .. code-block:: console
 
     $ git clone git@github.com:tomasstolker/diskmap.git
+    $ python setup.py install
 
-Running
+Example
 -------
 
 .. code-block:: python
@@ -38,12 +39,12 @@ Running
    >>> import diskmap
 
    >>> mapping = diskmap.DiskMap(fitsfile='image.fits',
-                                 pixscale=7.2e-3,
+                                 pixscale=1e-2,
                                  inclination=40.,
                                  pos_angle=70.,
                                  distance=100.)
 
-   >>> mapping.map_disk(r2scaling='power-law',
+   >>> mapping.map_disk(surface='power-law',
                         power_law=(0., 0.1, 1.15),
                         radius=(1., 500., 100))
 
@@ -56,7 +57,7 @@ Running
                               n_phase=30,
                               pol_max=0.5)
 
-   >>> mapping.write_output(filename='hd100453')
+   >>> mapping.write_output(filename='diskmap')
 
 
 Attribution
@@ -75,7 +76,3 @@ License
 Copyright 2020 Tomas Stolker
 
 *diskmap* is distributed under the MIT License. See the LICENSE file for the terms and conditions.
-
-.. |pypi| raw:: html
-
-   <a href="https://pypi.org/project/diskmap/" target="_blank">PyPI repository</a>

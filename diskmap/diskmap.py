@@ -5,7 +5,7 @@ from astropy.io import fits
 from scipy.interpolate import griddata, interp1d
 
 
-class DiskSurface:
+class DiskMap:
     def __init__(self,
                  fitsfile,
                  pixscale,
@@ -42,14 +42,14 @@ class DiskSurface:
         self.phase = None
 
     def map_disk(self,
-                 r2scaling,
+                 surface,
                  power_law,
                  radius,
                  filename=None):
 
         # Create geometric disk model
 
-        if r2scaling == 'power-law':
+        if surface == 'power-law':
 
             # Power-law disk height
 
@@ -60,7 +60,7 @@ class DiskSurface:
             height = power_law_height(radius, power_law[0], power_law[1], power_law[2])  # [au]
             opening = np.arctan2(height, radius)
 
-        elif r2scaling == 'file':
+        elif surface == 'file':
 
             # Read disk height from ASCII file
 
