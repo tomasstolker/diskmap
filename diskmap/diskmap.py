@@ -374,7 +374,6 @@ class DiskMap:
                     self.im_scaled[i, j] = r_max**2 * self.image[i, j]
 
     def total_intensity(self,
-                        r_max,
                         pol_max=1.):
         """
         Function for estimating the total intensity image when ``fitsfile`` contains a polarized

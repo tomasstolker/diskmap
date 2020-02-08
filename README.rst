@@ -51,7 +51,7 @@ Example
 
    >>> mapping.r2_scaling(r_max=200.)
 
-   >>> mapping.total_intensity(r_max=200.)
+   >>> mapping.total_intensity(pol_max=1.)
 
    >>> mapping.phase_function(radius=(50., 70.),
                               n_phase=30)
