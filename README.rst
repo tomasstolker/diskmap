@@ -47,7 +47,7 @@ Example
    >>> mapping.map_disk(power_law=(0., 0.1, 1.15),
                         radius=(1., 500., 100))
 
-   >>> mapping.deproject_disk(power_law=(0., 0.1, 1.15))
+   >>> mapping.deproject_disk()
 
    >>> mapping.r2_scaling(r_max=200.)
 

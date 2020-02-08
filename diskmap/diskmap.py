@@ -246,16 +246,9 @@ class DiskMap:
 
                 count += 1
 
-    def deproject_disk(self,
-                       power_law):
+    def deproject_disk(self):
         """
-        Function for deprojecting a disk surface with a power-law function.
-
-        Parameters
-        ----------
-        power_law : tuple(float, float, float)
-            The argument for the power-law function, provided as (a, b, c) with
-            f(x) = a + b*x^c, with ``a`` and ``b`` in au.
+        Function for deprojecting a disk surface based on the mapping of ``map_disk``.
 
         Returns
         -------
