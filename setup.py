@@ -12,7 +12,7 @@ reqs = [str(ir.req) for ir in reqs]
 
 setup(
     name='diskmap',
-    version='0.0.1',
+    version='0.0.2',
     description='Scattered light mapping of protoplanetary disks',
     long_description=open('README.rst').read(),
     long_description_content_type='text/x-rst',
@@ -30,7 +30,7 @@ setup(
         'Development Status :: 4 - Beta',
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: Astronomy',
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',

@@ -1,3 +1,7 @@
+"""
+Module with mapping functionalities for protoplanetary disks.
+"""
+
 import math
 import numpy as np
 
@@ -6,12 +10,36 @@ from scipy.interpolate import griddata, interp1d
 
 
 class DiskMap:
+    """
+    Class for mapping a surface layer of a protoplanetary disk.
+    """
+
     def __init__(self,
                  fitsfile,
                  pixscale,
                  inclination,
                  pos_angle,
                  distance):
+        """
+        Parameters
+        ----------
+        fitsfile : str
+            FITS file with the scattered light imaged.
+        pixscale : float
+            Pixel scale (arcsec).
+        inclination : float
+            Inclination of the disk (deg).
+        pos_angle : float
+            Position angle of the disk (deg). Defined in counterclockwise direction with respect
+            to the vertical axis (i.e. east of north).
+        distance : float
+            Distance (pc).
+
+        Returns
+        -------
+        NoneType
+            None
+        """
 
         self.image = fits.getdata(fitsfile)
         self.image = np.nan_to_num(self.image)
@@ -32,20 +60,44 @@ class DiskMap:
         self.incl = math.radians(self.incl)  # [rad]
         self.pos_ang = math.radians(self.pos_ang-90.)  # [rad]
 
-        self.grid = 500
+        self.grid = 501  # should be odd
 
         self.radius = None
+        self.azimuth = None
         self.opening = None
         self.scatter = None
+        self.im_deproj = None
         self.im_scaled = None
         self.stokes_i = None
         self.phase = None
 
     def map_disk(self,
-                 surface,
                  power_law,
-                 radius,
+                 radius=(1., 500., 100),
+                 surface='power-law',
                  filename=None):
+        """
+        Function for mapping a scattered light image to a power-law disk surface.
+
+        Parameters
+        ----------
+        power_law : tuple(float, float, float)
+            The argument for the power-law function, provided as (a, b, c) with
+            f(x) = a + b*x^c, with ``a`` and ``b`` in au.
+        radius : tuple(float, float, int)
+            Radius points that are sampled, provided as (r_in, r_out, n_r), with ``r_in`` and
+            ``r_out`` in au.
+        surface : str
+            Parameterization type for the disk surface ('power-law' or 'file').
+        filename : star
+            Filename which contains the radius in au (first column) and the height of the disk
+            surface in au (second column).
+
+        Returns
+        -------
+        NoneType
+            None
+        """
 
         # Create geometric disk model
 
@@ -56,29 +108,35 @@ class DiskMap:
             def power_law_height(x_power, a_power, b_power, c_power):
                 return a_power + b_power*x_power**c_power
 
-            radius = np.linspace(radius[0], radius[1], radius[2])  # [au]
-            height = power_law_height(radius, power_law[0], power_law[1], power_law[2])  # [au]
-            opening = np.arctan2(height, radius)
+            # midplane radius [au]
+            disk_radius = np.linspace(radius[0], radius[1], radius[2])
+
+            # disk height [au]
+            disk_height = power_law_height(disk_radius, power_law[0], power_law[1], power_law[2])
+
+            # opening angle [rad]
+            disk_opening = np.arctan2(disk_height, disk_radius)
 
         elif surface == 'file':
 
             # Read disk height from ASCII file
 
             data = np.loadtxt(filename)
-            radius = data[:, 0]  # [au]
-            height = data[:, 1]  # [au]
 
-            radius = np.linspace(radius[0], radius[-1], 100)  # [au]
+            # midplane radius [au]
+            disk_radius = np.linspace(radius[0], radius[-1], 100)
 
-            height_interp = interp1d(radius, height)
-            height = height_interp(radius)  # [au]
+            # disk height [au]
+            height_interp = interp1d(data[:, 0], data[:, 1])
+            disk_height = height_interp(disk_radius)
 
-            opening = np.arctan2(height, radius)  # [au]
+            # opening angle [rad]
+            disk_opening = np.arctan2(disk_height, disk_radius)  # [au]
 
         # Project disk height to image plane
 
-        phi = np.linspace(0., 359., 360)  # [deg]
-        phi = np.radians(phi)  # [rad]
+        disk_phi = np.linspace(0., 359., 360)  # [deg]
+        disk_phi = np.radians(disk_phi)  # [rad]
 
         x_im = []
         y_im = []
@@ -87,11 +145,12 @@ class DiskMap:
         s_im = []
         p_im = []
 
-        for i, r_item in enumerate(radius):
-            for j, p_item in enumerate(phi):
+        for i, r_item in enumerate(disk_radius):
+            for j, p_item in enumerate(disk_phi):
 
                 x_temp = r_item * np.sin(p_item)
-                y_temp = height[i]*math.sin(self.incl) - r_item*np.cos(p_item)*math.cos(self.incl)
+                y_temp = disk_height[i]*math.sin(self.incl) - \
+                    r_item*np.cos(p_item)*math.cos(self.incl)
 
                 x_rot = x_temp*math.cos(self.pos_ang) - y_temp*math.sin(self.pos_ang)
                 y_rot = x_temp*math.sin(self.pos_ang) + y_temp*math.cos(self.pos_ang)
@@ -99,12 +158,14 @@ class DiskMap:
                 x_im.append(x_rot)
                 y_im.append(y_rot)
 
-                r_im.append(math.sqrt(r_item**2+height[i]**2))
+                r_im.append(math.sqrt(r_item**2+disk_height[i]**2))
                 p_im.append(p_item)
-                o_im.append(opening[i])
+                o_im.append(disk_opening[i])
 
-                par1 = math.sin(math.pi/2.+opening[i])*math.cos(math.pi+p_item)*math.sin(self.incl)
-                par2 = math.cos(math.pi/2.+opening[i])*math.cos(self.incl)
+                ang_tmp = math.pi/2.+disk_opening[i]
+
+                par1 = math.sin(ang_tmp)*math.cos(math.pi+p_item)*math.sin(self.incl)
+                par2 = math.cos(ang_tmp)*math.cos(self.incl)
 
                 s_im.append(math.pi - math.acos(par1+par2))
 
@@ -128,43 +189,25 @@ class DiskMap:
         grid_xy = np.zeros((self.grid**2, 2))
 
         count = 0
-        for i in range(-self.grid // 2, self.grid // 2):
-            for j in range(-self.grid // 2, self.grid // 2):
+
+        for i in range(-(self.grid-1)//2, (self.grid-1)//2+1):
+            for j in range(-(self.grid-1)//2, (self.grid-1)//2+1):
                 grid_xy[count, 0] = float(i)
                 grid_xy[count, 1] = float(j)
+
                 count += 1
 
         image_xy = np.zeros((len(x_im), 2))
+
         for i, _ in enumerate(x_im):
             image_xy[i, 0] = x_im[i]
             image_xy[i, 1] = y_im[i]
 
-        # Interpolate data
-
-        fit_radius = griddata(image_xy, r_im, grid_xy)
-        fit_phi = griddata(image_xy, p_im, grid_xy)
-        fit_opening = griddata(image_xy, o_im, grid_xy)
-        fit_scatter = griddata(image_xy, s_im, grid_xy)
-
-        grid_size = int(math.sqrt(np.size(fit_radius)))
-        radius = np.zeros((grid_size, grid_size))
-        phi = np.zeros((grid_size, grid_size))
-        opening = np.zeros((grid_size, grid_size))
-        scatter = np.zeros((grid_size, grid_size))
-
-        count = 0
-        for i in range(grid_size):
-            for j in range(grid_size):
-                radius[j, i] = fit_radius[count]
-                phi[j, i] = fit_phi[count]
-                opening[j, i] = fit_opening[count]
-                scatter[j, i] = fit_scatter[count]
-                count += 1
-
-        # Map image plane
+        # Interpolate image plane
 
         if self.npix % 2 == 0:
             x_grid = y_grid = np.linspace(-self.npix/2+0.5, self.npix/2-0.5, self.npix)
+
         elif self.npix % 2 == 1:
             x_grid = y_grid = np.linspace(-(self.npix-1)/2, (self.npix-1)/2, self.npix)
 
@@ -183,10 +226,12 @@ class DiskMap:
                 count += 1
 
         fit_radius = griddata(image_xy, r_im, grid)
+        fit_azimuth = griddata(image_xy, p_im, grid)
         fit_opening = griddata(image_xy, o_im, grid)
         fit_scatter = griddata(image_xy, s_im, grid)
 
         self.radius = np.zeros((self.npix, self.npix))
+        self.azimuth = np.zeros((self.npix, self.npix))
         self.opening = np.zeros((self.npix, self.npix))
         self.scatter = np.zeros((self.npix, self.npix))
 
@@ -195,13 +240,123 @@ class DiskMap:
         for i in range(self.npix):
             for j in range(self.npix):
                 self.radius[i, j] = fit_radius[count]
+                self.azimuth[i, j] = fit_azimuth[count]
                 self.opening[i, j] = fit_opening[count]
                 self.scatter[i, j] = fit_scatter[count]
 
                 count += 1
 
+    def deproject_disk(self,
+                       power_law):
+        """
+        Function for deprojecting a disk surface with a power-law function.
+
+        Parameters
+        ----------
+        power_law : tuple(float, float, float)
+            The argument for the power-law function, provided as (a, b, c) with
+            f(x) = a + b*x^c, with ``a`` and ``b`` in au.
+
+        Returns
+        -------
+        NoneType
+            None
+        """
+
+        # Deproject disk surface
+
+        if self.radius is None or self.azimuth is None:
+            raise ValueError('Please run \'map_disk\' and before using \'deproject_disk\'.')
+
+        x_disk = []
+        y_disk = []
+        im_disk = []
+
+        for i in range(self.npix):
+            for j in range(self.npix):
+                x_disk.append(self.radius[i, j]*np.cos(self.azimuth[i, j]-self.pos_ang)+math.pi/2.)
+                y_disk.append(self.radius[i, j]*np.sin(self.azimuth[i, j]-self.pos_ang)+math.pi/2.)
+                im_disk.append(self.image[i, j])
+
+        # Sort disk plane points along x-axis
+
+        x_index = np.argsort(x_disk)
+
+        y_sort = np.zeros(len(y_disk))
+        im_sort = np.zeros(len(y_disk))
+
+        for i in range(len(y_disk)):
+            y_sort[i] = y_disk[x_index[i]]
+            im_sort[i] = im_disk[x_index[i]]
+
+        grid_xy = np.zeros((self.grid**2, 2))
+
+        count = 0
+
+        for i in range(-(self.grid-1)//2, (self.grid-1)//2+1):
+            for j in range(-(self.grid-1)//2, (self.grid-1)//2+1):
+                grid_xy[count, 0] = float(i)
+                grid_xy[count, 1] = float(j)
+
+                count += 1
+
+        image_xy = np.zeros((len(y_disk), 2))
+
+        for i, _ in enumerate(y_disk):
+            image_xy[i, 0] = x_disk[i]
+            image_xy[i, 1] = y_disk[i]
+
+        # Interpolate disk plane
+
+        if self.npix % 2 == 0:
+            x_grid = y_grid = np.linspace(-self.npix/2+0.5, self.npix/2-0.5, self.npix)
+
+        elif self.npix % 2 == 1:
+            x_grid = y_grid = np.linspace(-(self.npix-1)/2, (self.npix-1)/2, self.npix)
+
+        x_grid *= self.pixscale*self.distance  # [au]
+        y_grid *= self.pixscale*self.distance  # [au]
+
+        grid = np.zeros((self.npix**2, 2))
+
+        count = 0
+
+        for i in range(self.npix):
+            for j in range(self.npix):
+                grid[count, 0] = x_grid[i]
+                grid[count, 1] = x_grid[j]
+
+                count += 1
+
+        fit_im = griddata(image_xy, im_disk, grid)
+
+        self.im_deproj = np.zeros((self.npix, self.npix))
+
+        count = 0
+
+        for i in range(self.npix):
+            for j in range(self.npix):
+                self.im_deproj[i, j] = fit_im[count]
+
+                count += 1
+
     def r2_scaling(self,
                    r_max):
+        """
+        Function for correcting a scattered light image for the r^2 decrease of the stellar
+        irradiation of the disk surface.
+
+        Parameters
+        ----------
+        r_max : float
+            Maximum disk radius (au) for the r^2-scaling. Beyond this distance, a constant
+            r^2-scaling is applied of value ``r_max``.
+
+        Returns
+        -------
+        NoneType
+            None
+        """
 
         # r^2 scaling
 
@@ -220,7 +375,22 @@ class DiskMap:
 
     def total_intensity(self,
                         r_max,
-                        pol_max=0.5):
+                        pol_max=1.):
+        """
+        Function for estimating the total intensity image when ``fitsfile`` contains a polarized
+        light image. A Rayleigh phase function is assumed and effects of multiple are ignored.
+
+        Parameters
+        ----------
+        pol_max : float
+            The peak of the Rayleigh phase function, which normalizes the estimated total
+            intensity image.
+
+        Returns
+        -------
+        NoneType
+            None
+        """
 
         # Total intensity
 
@@ -229,14 +399,36 @@ class DiskMap:
 
         alpha = np.cos(self.scatter)
         deg_pol = -pol_max*(alpha*alpha-1.)/(alpha*alpha+1.)
+
         self.stokes_i = self.im_scaled / deg_pol
 
     def phase_function(self,
                        radius,
-                       n_phase,
-                       pol_max=0.5):
+                       n_phase):
+        """
+        Function for estimating the polarized and total intensity phase function when ``fitsfile``
+        contains a polarized light image. A Rayleigh phase function is assumed and effects of
+        multiple are ignored. Pixel values are scaled by r^2 such that irradiation effects do not
+        affect the result, which is extracted in arbitrary units.
+
+        Parameters
+        ----------
+        radius : tuple(float, float)
+            Inner and outer radius (au) between which pixels are selected for estimating the phase
+            function.
+        n_phase : int
+            Number of sampling points for the phase function between 0 and 180 deg.
+
+        Returns
+        -------
+        NoneType
+            None
+        """
 
         # Phase function
+
+        # Phase function is normalizedf so pol_max has not effect
+        pol_max = 1.
 
         if self.radius is None or self.scatter is None or self.im_scaled is None:
             raise ValueError('Please run \'map_disk\' and \'r2_scaling\' before using '
@@ -249,6 +441,7 @@ class DiskMap:
             for j in range(self.npix):
                 if self.radius[i, j] > radius[0] and self.radius[i, j] < radius[1]:
                     scat_select.append(math.degrees(self.scatter[i, j]))
+
                     # use im_scaled to correct for differences across the selected radius
                     im_select.append(self.im_scaled[i, j])
 
@@ -257,6 +450,7 @@ class DiskMap:
 
         im_bins = []
         scat_bins = []
+
         for i in range(n_phase):
             im_bins.append([])
             scat_bins.append([])
@@ -297,6 +491,19 @@ class DiskMap:
 
     def write_output(self,
                      filename):
+        """
+        Function for writing the available results to FITS files.
+
+        Parameters
+        ----------
+        filename : str
+            Filename start that is used for all the output file.
+
+        Returns
+        -------
+        NoneType
+            None
+        """
 
         # Write FITS output
 
@@ -304,13 +511,16 @@ class DiskMap:
             fits.writeto(f'{filename}_radius.fits', self.radius, overwrite=True)
 
         if self.scatter is not None:
-            fits.writeto(f'{filename}_scatter.fits', np.degrees(self.scatter), overwrite=True)
+            fits.writeto(f'{filename}_scat_angle.fits', np.degrees(self.scatter), overwrite=True)
+
+        if self.im_deproj is not None:
+            fits.writeto(f'{filename}_deprojected.fits', self.im_deproj, overwrite=True)
 
         if self.im_scaled is not None:
-            fits.writeto(f'{filename}_scaled.fits', self.im_scaled, overwrite=True)
+            fits.writeto(f'{filename}_r2_scaled.fits', self.im_scaled, overwrite=True)
 
         if self.stokes_i is not None:
-            fits.writeto(f'{filename}_stokes_i.fits', self.stokes_i, overwrite=True)
+            fits.writeto(f'{filename}_total_intensity.fits', self.stokes_i, overwrite=True)
 
         if self.phase is not None:
             header = 'Scattering angle [deg] - Polarized intensity [a.u.] - Uncertainty [a.u.] ' \
