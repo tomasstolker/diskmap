@@ -12,7 +12,7 @@ reqs = [str(ir.req) for ir in reqs]
 
 setup(
     name='diskmap',
-    version='0.0.4',
+    version='0.0.5',
     description='Scattered light mapping of protoplanetary disks',
     long_description=open('README.rst').read(),
     long_description_content_type='text/x-rst',
