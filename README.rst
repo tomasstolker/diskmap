@@ -13,7 +13,7 @@
 .. image:: http://img.shields.io/badge/arXiv-1609.09505-orange.svg?style=flat
     :target: https://arxiv.org/abs/1609.09505
 
-Python tool for scattered light mapping of protoplanetary disks. The disk surface is parameterized with a power law profile which is then used to calculate the projected radius and scattering angle at each pixel. From this, a deprojected image, a stellar irradiation corrected image, and a scattering phase function can be extracted.
+Python tool for scattered light mapping of protoplanetary disks. The disk surface is parameterized with a power law profile or read from an input file. The projected radius and scattering angle is then calculated at each pixel. From this, a deprojected image, a stellar irradiation corrected image, and a scattering phase function can be extracted.
 
 Installation
 ------------
