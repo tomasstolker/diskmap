@@ -62,7 +62,7 @@ Example
 Attribution
 -----------
 
-Please cite `Stolker et al. (2016) <https://ui.adsabs.harvard.edu/abs/2016A%26A...596A..70S/abstract/>`_ whenever results from *diskmap* are used in a publication.
+Please cite `Stolker et al. (2016) <https://ui.adsabs.harvard.edu/abs/2016A%26A...596A..70S>`_ whenever results from *diskmap* are used in a publication.
 
 Contributing
 ------------
