@@ -28,7 +28,8 @@ class DiskMap:
         pixscale : float
             Pixel scale (arcsec).
         inclination : float
-            Inclination of the disk (deg).
+            Inclination of the disk (deg). Include a minus sign to exchange the near and far side
+            in the mapping of the disk.
         pos_angle : float
             Position angle of the disk (deg). Defined in counterclockwise direction with respect
             to the vertical axis (i.e. east of north).
@@ -124,7 +125,7 @@ class DiskMap:
             data = np.loadtxt(filename)
 
             # midplane radius [au]
-            disk_radius = np.linspace(radius[0], radius[-1], 100)
+            disk_radius = np.linspace(radius[0], radius[1], radius[2])
 
             # disk height [au]
             height_interp = interp1d(data[:, 0], data[:, 1])

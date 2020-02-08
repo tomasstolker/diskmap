@@ -5,4 +5,4 @@ __license__ = 'MIT'
 __version__ = '0.0.3'
 __maintainer__ = 'Tomas Stolker'
 __email__ = 'tomas.stolker@phys.ethz.ch'
-__status__ = 'Development'
+__status__ = 'Development'4
