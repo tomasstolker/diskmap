@@ -52,14 +52,11 @@ class DiskMap:
             raise ValueError('The dimensions of the image should have the same size.')
 
         self.pixscale = pixscale  # [arcsec]
-        self.incl = inclination  # [deg]
-        self.pos_ang = pos_angle  # [deg]
+        self.incl = math.radians(inclination)  # [rad]
+        self.pos_ang = math.radians(pos_angle)  # [rad]
         self.distance = distance  # [pc]
 
         self.npix = self.image.shape[0]
-
-        self.incl = math.radians(self.incl)  # [rad]
-        self.pos_ang = math.radians(self.pos_ang-90.)  # [rad]
 
         self.grid = 501  # should be odd
 
@@ -87,7 +84,9 @@ class DiskMap:
             f(x) = a + b*x^c, with ``a`` and ``b`` in au.
         radius : tuple(float, float, int)
             Radius points that are sampled, provided as (r_in, r_out, n_r), with ``r_in`` and
-            ``r_out`` in au.
+            ``r_out`` in au. The outer radius should be set large enough such that a radius is
+            sampled for each pixel in the field of view. To check if any NaNs are present, have
+            a look at the `_radius.fits` output.
         surface : str
             Parameterization type for the disk surface ('power-law' or 'file').
         filename : star
@@ -149,12 +148,15 @@ class DiskMap:
         for i, r_item in enumerate(disk_radius):
             for j, p_item in enumerate(disk_phi):
 
-                x_temp = r_item * np.sin(p_item)
-                y_temp = disk_height[i]*math.sin(self.incl) - \
+                x_tmp = r_item * np.sin(p_item)
+                y_tmp = disk_height[i]*math.sin(self.incl) - \
                     r_item*np.cos(p_item)*math.cos(self.incl)
 
-                x_rot = x_temp*math.cos(self.pos_ang) - y_temp*math.sin(self.pos_ang)
-                y_rot = x_temp*math.sin(self.pos_ang) + y_temp*math.cos(self.pos_ang)
+                x_rot = x_tmp*math.cos(math.pi-self.pos_ang) - \
+                    y_tmp*math.sin(math.pi-self.pos_ang)
+
+                y_rot = x_tmp*math.sin(math.pi-self.pos_ang) + \
+                    y_tmp*math.cos(math.pi-self.pos_ang)
 
                 x_im.append(x_rot)
                 y_im.append(y_rot)
@@ -268,8 +270,15 @@ class DiskMap:
 
         for i in range(self.npix):
             for j in range(self.npix):
-                x_disk.append(self.radius[i, j]*np.cos(self.azimuth[i, j]-self.pos_ang)+math.pi/2.)
-                y_disk.append(self.radius[i, j]*np.sin(self.azimuth[i, j]-self.pos_ang)+math.pi/2.)
+                x_tmp = self.radius[i, j]*np.cos(self.azimuth[i, j])
+                y_tmp = self.radius[i, j]*np.sin(self.azimuth[i, j])
+
+                x_disk.append(x_tmp*math.cos(math.pi/2.-self.pos_ang) -
+                              y_tmp*math.sin(math.pi/2.-self.pos_ang))
+
+                y_disk.append(x_tmp*math.sin(math.pi/2.-self.pos_ang) +
+                              y_tmp*math.cos(math.pi/2.-self.pos_ang))
+
                 im_disk.append(self.image[i, j])
 
         # Sort disk plane points along x-axis
@@ -322,7 +331,11 @@ class DiskMap:
 
                 count += 1
 
-        fit_im = griddata(image_xy, im_disk, grid)
+        try:
+            fit_im = griddata(image_xy, im_disk, grid)
+        except ValueError:
+            raise ValueError('The radius sampling should cover the complete field of view of the '
+                             'image. Try increasing the outer \'radius\' value in \'map_disk\'.')
 
         self.im_deproj = np.zeros((self.npix, self.npix))
 
