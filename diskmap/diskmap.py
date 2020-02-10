@@ -81,7 +81,9 @@ class DiskMap:
         ----------
         power_law : tuple(float, float, float)
             The argument for the power-law function, provided as (a, b, c) with
-            f(x) = a + b*x^c, with ``a`` and ``b`` in au.
+            f(x) = a + b*x^c, with ``a`` and ``b`` in au. Set all values to zero for the mapping
+            and deprojection of a geometrically flat disk, in which case only the inclination is
+            used for the deprojection.
         radius : tuple(float, float, int)
             Radius points that are sampled, provided as (r_in, r_out, n_r), with ``r_in`` and
             ``r_out`` in au. The outer radius should be set large enough such that a radius is
@@ -335,7 +337,8 @@ class DiskMap:
             fit_im = griddata(image_xy, im_disk, grid)
         except ValueError:
             raise ValueError('The radius sampling should cover the complete field of view of the '
-                             'image. Try increasing the outer \'radius\' value in \'map_disk\'.')
+                             'image. Try increasing the outer \'radius\' value in \'map_disk\' '
+                             'and have a look at the \'_radius.fits\' output to check for NaNs.')
 
         self.im_deproj = np.zeros((self.npix, self.npix))
 
