@@ -16,3 +16,7 @@ script:
 
 after_success:
   - coveralls
+
+notifications:
+  - webhooks: https://coveralls.io/webhook
+  - email: false
