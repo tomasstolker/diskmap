@@ -2,10 +2,13 @@
 Module with mapping functionalities for protoplanetary disks.
 """
 
+from typing import Tuple
+
 import math
 import numpy as np
 
 from astropy.io import fits
+from typeguard import typechecked
 from scipy.interpolate import griddata, interp1d
 
 
@@ -14,12 +17,13 @@ class DiskMap:
     Class for mapping a surface layer of a protoplanetary disk.
     """
 
+    @typechecked
     def __init__(self,
-                 fitsfile,
-                 pixscale,
-                 inclination,
-                 pos_angle,
-                 distance):
+                 fitsfile: str,
+                 pixscale: float,
+                 inclination: float,
+                 pos_angle: float,
+                 distance: float) -> None:
         """
         Parameters
         ----------
@@ -69,11 +73,12 @@ class DiskMap:
         self.stokes_i = None
         self.phase = None
 
+    @typechecked
     def map_disk(self,
-                 power_law,
-                 radius=(1., 500., 100),
-                 surface='power-law',
-                 filename=None):
+                 power_law: Tuple[float, float, float],
+                 radius: Tuple[float, float, float] = (1., 500., 100),
+                 surface: str = 'power-law',
+                 filename: str = None) -> None:
         """
         Function for mapping a scattered light image to a power-law disk surface.
 
@@ -107,7 +112,12 @@ class DiskMap:
 
             # Power-law disk height
 
-            def power_law_height(x_power, a_power, b_power, c_power):
+            @typechecked
+            def power_law_height(x_power: np.ndarray,
+                                 a_power: float,
+                                 b_power: float,
+                                 c_power: float) -> np.ndarray:
+
                 return a_power + b_power*x_power**c_power
 
             # midplane radius [au]
@@ -253,7 +263,8 @@ class DiskMap:
 
                 count += 1
 
-    def deproject_disk(self):
+    @typechecked
+    def deproject_disk(self) -> None:
         """
         Function for deprojecting a disk surface based on the mapping of ``map_disk``.
 
@@ -354,8 +365,9 @@ class DiskMap:
 
                 count += 1
 
+    @typechecked
     def r2_scaling(self,
-                   r_max):
+                   r_max: float) -> None:
         """
         Function for correcting a scattered light image for the r^2 decrease of the stellar
         irradiation of the disk surface.
@@ -387,8 +399,9 @@ class DiskMap:
                 else:
                     self.im_scaled[i, j] = r_max**2 * self.image[i, j]
 
+    @typechecked
     def total_intensity(self,
-                        pol_max=1.):
+                        pol_max: 1.) -> None:
         """
         Function for estimating the total intensity image when ``fitsfile`` contains a polarized
         light image. A Rayleigh phase function is assumed and effects of multiple are ignored.
@@ -415,9 +428,10 @@ class DiskMap:
 
         self.stokes_i = self.im_scaled / deg_pol
 
+    @typechecked
     def phase_function(self,
-                       radius,
-                       n_phase):
+                       radius: Tuple[float, float],
+                       n_phase: int):
         """
         Function for estimating the polarized and total intensity phase function when ``fitsfile``
         contains a polarized light image. A Rayleigh phase function is assumed and effects of
@@ -502,8 +516,9 @@ class DiskMap:
 
         self.phase = np.column_stack([angle, pol_flux, pol_error, tot_flux, tot_error])
 
+    @typechecked
     def write_output(self,
-                     filename):
+                     filename: str) -> None:
         """
         Function for writing the available results to FITS files.
 
