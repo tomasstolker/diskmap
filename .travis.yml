@@ -9,10 +9,11 @@ python:
 install:
   - pip install -e .
   - pip install --upgrade -r requirements.txt
+  - pip install pytest-cov
   - pip install coveralls
 
 script:
-  - pytest
+  - pytest --cov=diskmap
 
 after_success:
   - coveralls

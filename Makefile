@@ -19,3 +19,4 @@ clean:
 	rm -rf build/
 	rm -rf dist/
 	rm -rf diskmap.egg-info/
+	rm -f .coverage
