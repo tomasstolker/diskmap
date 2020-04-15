@@ -7,6 +7,9 @@
 .. image:: https://img.shields.io/badge/Python-3.6%2C%203.7-yellow.svg?style=flat
     :target: https://pypi.python.org/pypi/diskmap
 
+.. image:: https://www.codefactor.io/repository/github/tomasstolker/diskmap/badge
+   :target: https://www.codefactor.io/repository/github/tomasstolker/diskmap
+
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
     :target: https://github.com/tomasstolker/diskmap/blob/master/LICENSE
 
