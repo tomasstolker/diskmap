@@ -10,11 +10,11 @@
 .. image:: https://travis-ci.org/tomasstolker/diskmap.svg?branch=master
     :target: https://travis-ci.org/tomasstolker/diskmap
 
-.. image:: https://www.codefactor.io/repository/github/tomasstolker/diskmap/badge
-   :target: https://www.codefactor.io/repository/github/tomasstolker/diskmap
-
 .. image:: https://coveralls.io/repos/github/tomasstolker/diskmap/badge.svg
    :target: https://coveralls.io/github/tomasstolker/diskmap
+
+.. image:: https://www.codefactor.io/repository/github/tomasstolker/diskmap/badge
+   :target: https://www.codefactor.io/repository/github/tomasstolker/diskmap
 
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
     :target: https://github.com/tomasstolker/diskmap/blob/master/LICENSE
