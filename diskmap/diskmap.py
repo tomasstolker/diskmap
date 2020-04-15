@@ -211,10 +211,12 @@ class DiskMap:
         # Interpolate image plane
 
         if self.npix % 2 == 0:
-            x_grid = y_grid = np.linspace(-self.npix/2+0.5, self.npix/2-0.5, self.npix)
+            x_grid = np.linspace(-self.npix/2+0.5, self.npix/2-0.5, self.npix)
+            y_grid = np.linspace(-self.npix/2+0.5, self.npix/2-0.5, self.npix)
 
         elif self.npix % 2 == 1:
-            x_grid = y_grid = np.linspace(-(self.npix-1)/2, (self.npix-1)/2, self.npix)
+            x_grid = np.linspace(-(self.npix-1)/2, (self.npix-1)/2, self.npix)
+            y_grid = np.linspace(-(self.npix-1)/2, (self.npix-1)/2, self.npix)
 
         x_grid *= self.pixscale*self.distance  # [au]
         y_grid *= self.pixscale*self.distance  # [au]
@@ -314,10 +316,12 @@ class DiskMap:
         # Interpolate disk plane
 
         if self.npix % 2 == 0:
-            x_grid = y_grid = np.linspace(-self.npix/2+0.5, self.npix/2-0.5, self.npix)
+            x_grid = np.linspace(-self.npix/2+0.5, self.npix/2-0.5, self.npix)
+            y_grid = np.linspace(-self.npix/2+0.5, self.npix/2-0.5, self.npix)
 
         elif self.npix % 2 == 1:
-            x_grid = y_grid = np.linspace(-(self.npix-1)/2, (self.npix-1)/2, self.npix)
+            x_grid = np.linspace(-(self.npix-1)/2, (self.npix-1)/2, self.npix)
+            y_grid = np.linspace(-(self.npix-1)/2, (self.npix-1)/2, self.npix)
 
         x_grid *= self.pixscale*self.distance  # [au]
         y_grid *= self.pixscale*self.distance  # [au]
