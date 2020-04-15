@@ -76,7 +76,7 @@ class DiskMap:
     @typechecked
     def map_disk(self,
                  power_law: Tuple[float, float, float],
-                 radius: Tuple[float, float, float] = (1., 500., 100),
+                 radius: Tuple[float, float, int] = (1., 500., 100),
                  surface: str = 'power-law',
                  filename: str = None) -> None:
         """
