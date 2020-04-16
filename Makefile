@@ -1,4 +1,4 @@
-.PHONY: help pypi pypi-test clean
+.PHONY: help pypi pypi-test docs clean
 
 help:
 	@echo "pypi - submit package to the PyPI server"
@@ -13,9 +13,16 @@ pypi-test:
 	python setup.py sdist bdist_wheel
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
+docs:
+	sphinx-apidoc -o docs diskmap
+	cd docs/
+	$(MAKE) -C docs clean
+	$(MAKE) -C docs html
+
 clean:
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -rf {} +
+	rm -rf docs/_build/
 	rm -rf build/
 	rm -rf dist/
 	rm -rf diskmap.egg-info/

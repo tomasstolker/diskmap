@@ -1,0 +1,763 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>diskmap.diskmap &mdash; diskmap  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> diskmap
+          
+
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installation-from-pypi">Installation from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installation-from-github">Installation from Github</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#testing-diskmap">Testing <cite>diskmap</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../diskmap.html">diskmap package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../diskmap.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../diskmap.html#module-diskmap.diskmap">diskmap.diskmap module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../diskmap.html#module-diskmap">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#questions-feedback">Questions &amp; feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#attribution">Attribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#contributing">Contributing</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">diskmap</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>diskmap.diskmap</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for diskmap.diskmap</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module with mapping functionalities for protoplanetary disks.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">astropy.io</span> <span class="kn">import</span> <span class="n">fits</span>
+<span class="kn">from</span> <span class="nn">typeguard</span> <span class="kn">import</span> <span class="n">typechecked</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">griddata</span><span class="p">,</span> <span class="n">interp1d</span>
+
+
+<div class="viewcode-block" id="DiskMap"><a class="viewcode-back" href="../../diskmap.html#diskmap.diskmap.DiskMap">[docs]</a><span class="k">class</span> <span class="nc">DiskMap</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for mapping a surface layer of a protoplanetary disk.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@typechecked</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">fitsfile</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">pixscale</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">inclination</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">pos_angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fitsfile : str</span>
+<span class="sd">            FITS file with the scattered light imaged.</span>
+<span class="sd">        pixscale : float</span>
+<span class="sd">            Pixel scale (arcsec).</span>
+<span class="sd">        inclination : float</span>
+<span class="sd">            Inclination of the disk (deg). Include a minus sign to exchange the near and far side</span>
+<span class="sd">            in the mapping of the disk.</span>
+<span class="sd">        pos_angle : float</span>
+<span class="sd">            Position angle of the disk (deg). Defined in counterclockwise direction with respect</span>
+<span class="sd">            to the vertical axis (i.e. east of north).</span>
+<span class="sd">        distance : float</span>
+<span class="sd">            Distance (pc).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        NoneType</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">getdata</span><span class="p">(</span><span class="n">fitsfile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;DiskMap requires a 2D image.&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The dimensions of the image should have the same size.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pixscale</span> <span class="o">=</span> <span class="n">pixscale</span>  <span class="c1"># [arcsec]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">incl</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">inclination</span><span class="p">)</span>  <span class="c1"># [rad]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos_ang</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">pos_angle</span><span class="p">)</span>  <span class="c1"># [rad]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="n">distance</span>  <span class="c1"># [pc]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">npix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="mi">501</span>  <span class="c1"># should be odd</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opening</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scatter</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">im_deproj</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">im_scaled</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stokes_i</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="DiskMap.map_disk"><a class="viewcode-back" href="../../diskmap.html#diskmap.diskmap.DiskMap.map_disk">[docs]</a>    <span class="nd">@typechecked</span>
+    <span class="k">def</span> <span class="nf">map_disk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">power_law</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+                 <span class="n">radius</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">500.</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+                 <span class="n">surface</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;power-law&#39;</span><span class="p">,</span>
+                 <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function for mapping a scattered light image to a power-law disk surface.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        power_law : tuple(float, float, float)</span>
+<span class="sd">            The argument for the power-law function, provided as (a, b, c) with</span>
+<span class="sd">            f(x) = a + b*x^c, with ``a`` and ``b`` in au. Set all values to zero for the mapping</span>
+<span class="sd">            and deprojection of a geometrically flat disk, in which case only the inclination is</span>
+<span class="sd">            used for the deprojection.</span>
+<span class="sd">        radius : tuple(float, float, int)</span>
+<span class="sd">            Radius points that are sampled, provided as (r_in, r_out, n_r), with ``r_in`` and</span>
+<span class="sd">            ``r_out`` in au. The outer radius should be set large enough such that a radius is</span>
+<span class="sd">            sampled for each pixel in the field of view. To check if any NaNs are present, have</span>
+<span class="sd">            a look at the `_radius.fits` output.</span>
+<span class="sd">        surface : str</span>
+<span class="sd">            Parameterization type for the disk surface (&#39;power-law&#39; or &#39;file&#39;).</span>
+<span class="sd">        filename : star</span>
+<span class="sd">            Filename which contains the radius in au (first column) and the height of the disk</span>
+<span class="sd">            surface in au (second column).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        NoneType</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Create geometric disk model</span>
+
+        <span class="k">if</span> <span class="n">surface</span> <span class="o">==</span> <span class="s1">&#39;power-law&#39;</span><span class="p">:</span>
+
+            <span class="c1"># Power-law disk height</span>
+
+            <span class="nd">@typechecked</span>
+            <span class="k">def</span> <span class="nf">power_law_height</span><span class="p">(</span><span class="n">x_power</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                 <span class="n">a_power</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                                 <span class="n">b_power</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                                 <span class="n">c_power</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+                <span class="k">return</span> <span class="n">a_power</span> <span class="o">+</span> <span class="n">b_power</span><span class="o">*</span><span class="n">x_power</span><span class="o">**</span><span class="n">c_power</span>
+
+            <span class="c1"># midplane radius [au]</span>
+            <span class="n">disk_radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">radius</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">radius</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">radius</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+            <span class="c1"># disk height [au]</span>
+            <span class="n">disk_height</span> <span class="o">=</span> <span class="n">power_law_height</span><span class="p">(</span><span class="n">disk_radius</span><span class="p">,</span> <span class="n">power_law</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">power_law</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">power_law</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+            <span class="c1"># opening angle [rad]</span>
+            <span class="n">disk_opening</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">disk_height</span><span class="p">,</span> <span class="n">disk_radius</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">surface</span> <span class="o">==</span> <span class="s1">&#39;file&#39;</span><span class="p">:</span>
+
+            <span class="c1"># Read disk height from ASCII file</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+            <span class="c1"># midplane radius [au]</span>
+            <span class="n">disk_radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">radius</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">radius</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">radius</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+            <span class="c1"># disk height [au]</span>
+            <span class="n">height_interp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">disk_height</span> <span class="o">=</span> <span class="n">height_interp</span><span class="p">(</span><span class="n">disk_radius</span><span class="p">)</span>
+
+            <span class="c1"># opening angle [rad]</span>
+            <span class="n">disk_opening</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">disk_height</span><span class="p">,</span> <span class="n">disk_radius</span><span class="p">)</span>  <span class="c1"># [au]</span>
+
+        <span class="c1"># Project disk height to image plane</span>
+
+        <span class="n">disk_phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">359.</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>  <span class="c1"># [deg]</span>
+        <span class="n">disk_phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">disk_phi</span><span class="p">)</span>  <span class="c1"># [rad]</span>
+
+        <span class="n">x_im</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">y_im</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">r_im</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">o_im</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">s_im</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">p_im</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r_item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">disk_radius</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">p_item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">disk_phi</span><span class="p">):</span>
+
+                <span class="n">x_tmp</span> <span class="o">=</span> <span class="n">r_item</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p_item</span><span class="p">)</span>
+                <span class="n">y_tmp</span> <span class="o">=</span> <span class="n">disk_height</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">incl</span><span class="p">)</span> <span class="o">-</span> \
+                    <span class="n">r_item</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">p_item</span><span class="p">)</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">incl</span><span class="p">)</span>
+
+                <span class="n">x_rot</span> <span class="o">=</span> <span class="n">x_tmp</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos_ang</span><span class="p">)</span> <span class="o">-</span> \
+                    <span class="n">y_tmp</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos_ang</span><span class="p">)</span>
+
+                <span class="n">y_rot</span> <span class="o">=</span> <span class="n">x_tmp</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos_ang</span><span class="p">)</span> <span class="o">+</span> \
+                    <span class="n">y_tmp</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos_ang</span><span class="p">)</span>
+
+                <span class="n">x_im</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_rot</span><span class="p">)</span>
+                <span class="n">y_im</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_rot</span><span class="p">)</span>
+
+                <span class="n">r_im</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">r_item</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">disk_height</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+                <span class="n">p_im</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p_item</span><span class="p">)</span>
+                <span class="n">o_im</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">disk_opening</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="n">ang_tmp</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">+</span><span class="n">disk_opening</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+                <span class="n">par1</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ang_tmp</span><span class="p">)</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">+</span><span class="n">p_item</span><span class="p">)</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">incl</span><span class="p">)</span>
+                <span class="n">par2</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ang_tmp</span><span class="p">)</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">incl</span><span class="p">)</span>
+
+                <span class="n">s_im</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">acos</span><span class="p">(</span><span class="n">par1</span><span class="o">+</span><span class="n">par2</span><span class="p">))</span>
+
+        <span class="c1"># Sort image plane points along x-axis</span>
+
+        <span class="n">x_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">x_im</span><span class="p">)</span>
+
+        <span class="n">y_sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_im</span><span class="p">))</span>
+        <span class="n">r_sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_im</span><span class="p">))</span>
+        <span class="n">p_sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_im</span><span class="p">))</span>
+        <span class="n">o_sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_im</span><span class="p">))</span>
+        <span class="n">s_sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_im</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_im</span><span class="p">)):</span>
+            <span class="n">y_sort</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_im</span><span class="p">[</span><span class="n">x_index</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="n">r_sort</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">r_im</span><span class="p">[</span><span class="n">x_index</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="n">p_sort</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">p_im</span><span class="p">[</span><span class="n">x_index</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="n">o_sort</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">o_im</span><span class="p">[</span><span class="n">x_index</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="n">s_sort</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">s_im</span><span class="p">[</span><span class="n">x_index</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+
+        <span class="n">grid_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">grid_xy</span><span class="p">[</span><span class="n">count</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">grid_xy</span><span class="p">[</span><span class="n">count</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">image_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">x_im</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x_im</span><span class="p">):</span>
+            <span class="n">image_xy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_im</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">image_xy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_im</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="c1"># Interpolate image plane</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">)</span>
+            <span class="n">y_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">x_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">)</span>
+            <span class="n">y_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">)</span>
+
+        <span class="n">x_grid</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixscale</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">distance</span>  <span class="c1"># [au]</span>
+        <span class="n">y_grid</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixscale</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">distance</span>  <span class="c1"># [au]</span>
+
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">):</span>
+                <span class="n">grid</span><span class="p">[</span><span class="n">count</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_grid</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">grid</span><span class="p">[</span><span class="n">count</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_grid</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">fit_radius</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span><span class="n">image_xy</span><span class="p">,</span> <span class="n">r_im</span><span class="p">,</span> <span class="n">grid</span><span class="p">)</span>
+        <span class="n">fit_azimuth</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span><span class="n">image_xy</span><span class="p">,</span> <span class="n">p_im</span><span class="p">,</span> <span class="n">grid</span><span class="p">)</span>
+        <span class="n">fit_opening</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span><span class="n">image_xy</span><span class="p">,</span> <span class="n">o_im</span><span class="p">,</span> <span class="n">grid</span><span class="p">)</span>
+        <span class="n">fit_scatter</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span><span class="n">image_xy</span><span class="p">,</span> <span class="n">s_im</span><span class="p">,</span> <span class="n">grid</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opening</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scatter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">))</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit_radius</span><span class="p">[</span><span class="n">count</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit_azimuth</span><span class="p">[</span><span class="n">count</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">opening</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit_opening</span><span class="p">[</span><span class="n">count</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scatter</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit_scatter</span><span class="p">[</span><span class="n">count</span><span class="p">]</span>
+
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="DiskMap.deproject_disk"><a class="viewcode-back" href="../../diskmap.html#diskmap.diskmap.DiskMap.deproject_disk">[docs]</a>    <span class="nd">@typechecked</span>
+    <span class="k">def</span> <span class="nf">deproject_disk</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function for deprojecting a disk surface based on the mapping of ``map_disk``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        NoneType</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Deproject disk surface</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please run </span><span class="se">\&#39;</span><span class="s1">map_disk</span><span class="se">\&#39;</span><span class="s1"> and before using </span><span class="se">\&#39;</span><span class="s1">deproject_disk</span><span class="se">\&#39;</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+        <span class="n">x_disk</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">y_disk</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">im_disk</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">):</span>
+                <span class="n">x_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+                <span class="n">y_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+
+                <span class="n">x_disk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_tmp</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos_ang</span><span class="p">)</span> <span class="o">-</span>
+                              <span class="n">y_tmp</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos_ang</span><span class="p">))</span>
+
+                <span class="n">y_disk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_tmp</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos_ang</span><span class="p">)</span> <span class="o">+</span>
+                              <span class="n">y_tmp</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos_ang</span><span class="p">))</span>
+
+                <span class="n">im_disk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+
+        <span class="c1"># Sort disk plane points along x-axis</span>
+
+        <span class="n">x_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">x_disk</span><span class="p">)</span>
+
+        <span class="n">y_sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_disk</span><span class="p">))</span>
+        <span class="n">im_sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_disk</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_disk</span><span class="p">)):</span>
+            <span class="n">y_sort</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_disk</span><span class="p">[</span><span class="n">x_index</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="n">im_sort</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">im_disk</span><span class="p">[</span><span class="n">x_index</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+
+        <span class="n">grid_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">grid_xy</span><span class="p">[</span><span class="n">count</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">grid_xy</span><span class="p">[</span><span class="n">count</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">image_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y_disk</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y_disk</span><span class="p">):</span>
+            <span class="n">image_xy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_disk</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">image_xy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_disk</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="c1"># Interpolate disk plane</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">)</span>
+            <span class="n">y_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">x_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">)</span>
+            <span class="n">y_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">)</span>
+
+        <span class="n">x_grid</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixscale</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">distance</span>  <span class="c1"># [au]</span>
+        <span class="n">y_grid</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixscale</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">distance</span>  <span class="c1"># [au]</span>
+
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">):</span>
+                <span class="n">grid</span><span class="p">[</span><span class="n">count</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_grid</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">grid</span><span class="p">[</span><span class="n">count</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_grid</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fit_im</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span><span class="n">image_xy</span><span class="p">,</span> <span class="n">im_disk</span><span class="p">,</span> <span class="n">grid</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The radius sampling should cover the complete field of view of the &#39;</span>
+                             <span class="s1">&#39;image. Try increasing the outer </span><span class="se">\&#39;</span><span class="s1">radius</span><span class="se">\&#39;</span><span class="s1"> value in </span><span class="se">\&#39;</span><span class="s1">map_disk</span><span class="se">\&#39;</span><span class="s1"> &#39;</span>
+                             <span class="s1">&#39;and have a look at the </span><span class="se">\&#39;</span><span class="s1">_radius.fits</span><span class="se">\&#39;</span><span class="s1"> output to check for NaNs.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">im_deproj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">))</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">im_deproj</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit_im</span><span class="p">[</span><span class="n">count</span><span class="p">]</span>
+
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="DiskMap.r2_scaling"><a class="viewcode-back" href="../../diskmap.html#diskmap.diskmap.DiskMap.r2_scaling">[docs]</a>    <span class="nd">@typechecked</span>
+    <span class="k">def</span> <span class="nf">r2_scaling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                   <span class="n">r_max</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function for correcting a scattered light image for the r^2 decrease of the stellar</span>
+<span class="sd">        irradiation of the disk surface.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        r_max : float</span>
+<span class="sd">            Maximum disk radius (au) for the r^2-scaling. Beyond this distance, a constant</span>
+<span class="sd">            r^2-scaling is applied of value ``r_max``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        NoneType</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># r^2 scaling</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please run </span><span class="se">\&#39;</span><span class="s1">map_disk</span><span class="se">\&#39;</span><span class="s1"> before using </span><span class="se">\&#39;</span><span class="s1">r2_scaling</span><span class="se">\&#39;</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">im_scaled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">r_max</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">im_scaled</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">im_scaled</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">r_max</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="DiskMap.total_intensity"><a class="viewcode-back" href="../../diskmap.html#diskmap.diskmap.DiskMap.total_intensity">[docs]</a>    <span class="nd">@typechecked</span>
+    <span class="k">def</span> <span class="nf">total_intensity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                        <span class="n">pol_max</span><span class="p">:</span> <span class="mf">1.</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function for estimating the total intensity image when ``fitsfile`` contains a polarized</span>
+<span class="sd">        light image. A Rayleigh phase function is assumed and effects of multiple are ignored.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pol_max : float</span>
+<span class="sd">            The peak of the Rayleigh phase function, which normalizes the estimated total</span>
+<span class="sd">            intensity image.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        NoneType</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Total intensity</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scatter</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">im_scaled</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please run </span><span class="se">\&#39;</span><span class="s1">map_disk</span><span class="se">\&#39;</span><span class="s1"> before using </span><span class="se">\&#39;</span><span class="s1">total_intensity</span><span class="se">\&#39;</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scatter</span><span class="p">)</span>
+        <span class="n">deg_pol</span> <span class="o">=</span> <span class="o">-</span><span class="n">pol_max</span><span class="o">*</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="n">alpha</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="n">alpha</span><span class="o">+</span><span class="mf">1.</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stokes_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">im_scaled</span> <span class="o">/</span> <span class="n">deg_pol</span></div>
+
+<div class="viewcode-block" id="DiskMap.phase_function"><a class="viewcode-back" href="../../diskmap.html#diskmap.diskmap.DiskMap.phase_function">[docs]</a>    <span class="nd">@typechecked</span>
+    <span class="k">def</span> <span class="nf">phase_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                       <span class="n">radius</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+                       <span class="n">n_phase</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function for estimating the polarized and total intensity phase function when ``fitsfile``</span>
+<span class="sd">        contains a polarized light image. A Rayleigh phase function is assumed and effects of</span>
+<span class="sd">        multiple are ignored. Pixel values are scaled by r^2 such that irradiation effects do not</span>
+<span class="sd">        affect the result, which is extracted in arbitrary units.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        radius : tuple(float, float)</span>
+<span class="sd">            Inner and outer radius (au) between which pixels are selected for estimating the phase</span>
+<span class="sd">            function.</span>
+<span class="sd">        n_phase : int</span>
+<span class="sd">            Number of sampling points for the phase function between 0 and 180 deg.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        NoneType</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Phase function</span>
+
+        <span class="c1"># Phase function is normalizedf so pol_max has not effect</span>
+        <span class="n">pol_max</span> <span class="o">=</span> <span class="mf">1.</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">scatter</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">im_scaled</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please run </span><span class="se">\&#39;</span><span class="s1">map_disk</span><span class="se">\&#39;</span><span class="s1"> and </span><span class="se">\&#39;</span><span class="s1">r2_scaling</span><span class="se">\&#39;</span><span class="s1"> before using &#39;</span>
+                             <span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">phase_function</span><span class="se">\&#39;</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+        <span class="n">scat_select</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">im_select</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npix</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">radius</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">radius</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">scat_select</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scatter</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]))</span>
+
+                    <span class="c1"># use im_scaled to correct for differences across the selected radius</span>
+                    <span class="n">im_select</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">im_scaled</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+
+        <span class="n">phase_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">180.</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">n_phase</span><span class="p">)</span>
+        <span class="n">bin_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">digitize</span><span class="p">(</span><span class="n">scat_select</span><span class="p">,</span> <span class="n">phase_bins</span><span class="p">)</span>
+
+        <span class="n">im_bins</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">scat_bins</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_phase</span><span class="p">):</span>
+            <span class="n">im_bins</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="n">scat_bins</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">im_select</span><span class="p">):</span>
+            <span class="n">im_bins</span><span class="p">[</span><span class="n">bin_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">im_select</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">scat_bins</span><span class="p">[</span><span class="n">bin_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scat_select</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="n">angle</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">pol_flux</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">pol_error</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_phase</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">im_bins</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">angle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">scat_bins</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                <span class="n">pol_flux</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">im_bins</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                <span class="n">pol_error</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanstd</span><span class="p">(</span><span class="n">im_bins</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">im_bins</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
+
+        <span class="c1"># Degree of polarization</span>
+
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span><span class="p">)</span>
+        <span class="n">deg_pol</span> <span class="o">=</span> <span class="o">-</span><span class="n">pol_max</span><span class="o">*</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="n">alpha</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="n">alpha</span><span class="o">+</span><span class="mf">1.</span><span class="p">)</span>
+
+        <span class="n">tot_flux</span> <span class="o">=</span> <span class="n">pol_flux</span><span class="o">/</span><span class="n">deg_pol</span>
+        <span class="n">tot_error</span> <span class="o">=</span> <span class="n">pol_error</span><span class="o">/</span><span class="n">deg_pol</span>
+
+        <span class="c1"># Normalization</span>
+
+        <span class="n">flux_norm</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pol_flux</span><span class="p">)</span>
+        <span class="n">pol_flux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pol_flux</span><span class="p">)</span><span class="o">/</span><span class="n">flux_norm</span>
+        <span class="n">pol_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pol_error</span><span class="p">)</span><span class="o">/</span><span class="n">flux_norm</span>
+
+        <span class="n">flux_norm</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">tot_flux</span><span class="p">)</span>
+        <span class="n">tot_flux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tot_flux</span><span class="p">)</span><span class="o">/</span><span class="n">flux_norm</span>
+        <span class="n">tot_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tot_error</span><span class="p">)</span><span class="o">/</span><span class="n">flux_norm</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">angle</span><span class="p">,</span> <span class="n">pol_flux</span><span class="p">,</span> <span class="n">pol_error</span><span class="p">,</span> <span class="n">tot_flux</span><span class="p">,</span> <span class="n">tot_error</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="DiskMap.write_output"><a class="viewcode-back" href="../../diskmap.html#diskmap.diskmap.DiskMap.write_output">[docs]</a>    <span class="nd">@typechecked</span>
+    <span class="k">def</span> <span class="nf">write_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                     <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function for writing the available results to FITS files.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            Filename start that is used for all the output file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        NoneType</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Write FITS output</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fits</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">_radius.fits&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scatter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fits</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">_scat_angle.fits&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scatter</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">im_deproj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fits</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">_deprojected.fits&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">im_deproj</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">im_scaled</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fits</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">_r2_scaled.fits&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">im_scaled</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stokes_i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fits</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">_total_intensity.fits&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stokes_i</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;Scattering angle [deg] - Polarized intensity [a.u.] - Uncertainty [a.u.] &#39;</span> \
+                     <span class="s1">&#39;- Total intensity [a.u.] - Uncertainty [a.u.]&#39;</span>
+
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">_phase_function.dat&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Tomas Stolker
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

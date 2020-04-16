@@ -10,6 +10,9 @@
 .. image:: https://travis-ci.org/tomasstolker/diskmap.svg?branch=master
     :target: https://travis-ci.org/tomasstolker/diskmap
 
+.. image:: https://readthedocs.org/projects/diskmap/badge/?version=latest
+    :target: http://diskmap.readthedocs.io/en/latest/?badge=latest
+
 .. image:: https://coveralls.io/repos/github/tomasstolker/diskmap/badge.svg
    :target: https://coveralls.io/github/tomasstolker/diskmap
 
