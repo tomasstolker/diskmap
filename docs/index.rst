@@ -13,5 +13,6 @@ Documentation for *diskmap*
    :maxdepth: 2
 
    installation
+   tutorial.ipynb
    modules
    about

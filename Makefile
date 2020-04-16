@@ -22,6 +22,9 @@ docs:
 clean:
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -rf {} +
+	rm -rf docs/.ipynb_checkpoints
+	rm -rf docs/*.fits
+	rm -rf docs/*.dat
 	rm -rf docs/_build/
 	rm -rf build/
 	rm -rf dist/

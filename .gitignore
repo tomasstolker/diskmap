@@ -2,3 +2,6 @@
 .DS_Store
 .coverage
 docs/_build
+docs/.ipynb_checkpoints/*
+docs/*.fits
+docs/*.dat
