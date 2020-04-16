@@ -206,6 +206,25 @@
 <em class="property">class </em><code class="sig-prename descclassname">diskmap.diskmap.</code><code class="sig-name descname">DiskMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fitsfile</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">pixscale</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">inclination</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">pos_angle</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">distance</span><span class="p">:</span> <span class="n">float</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/diskmap/diskmap.html#DiskMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#diskmap.diskmap.DiskMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class for mapping a surface layer of a protoplanetary disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fitsfile</strong> (<em>str</em>) – FITS file with the scattered light imaged.</p></li>
+<li><p><strong>pixscale</strong> (<em>float</em>) – Pixel scale (arcsec).</p></li>
+<li><p><strong>inclination</strong> (<em>float</em>) – Inclination of the disk (deg). Include a minus sign to exchange the near and far side
+in the mapping of the disk.</p></li>
+<li><p><strong>pos_angle</strong> (<em>float</em>) – Position angle of the disk (deg). Defined in counterclockwise direction with respect
+to the vertical axis (i.e. east of north).</p></li>
+<li><p><strong>distance</strong> (<em>float</em>) – Distance (pc).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>NoneType</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="diskmap.diskmap.DiskMap.deproject_disk">
 <code class="sig-name descname">deproject_disk</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/diskmap/diskmap.html#DiskMap.deproject_disk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#diskmap.diskmap.DiskMap.deproject_disk" title="Permalink to this definition">¶</a></dt>
@@ -356,7 +375,7 @@ intensity image.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Tomas Stolker
+        &copy; Copyright 2018-2020, Tomas Stolker
 
     </p>
   </div>

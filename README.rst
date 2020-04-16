@@ -43,32 +43,10 @@ Installation from Github:
     $ git clone git@github.com:tomasstolker/diskmap.git
     $ python setup.py install
 
-Example
--------
+Documentation
+-------------
 
-.. code-block:: python
-
-   >>> import diskmap
-
-   >>> mapping = diskmap.DiskMap(fitsfile='image.fits',
-                                 pixscale=1e-2,
-                                 inclination=40.,
-                                 pos_angle=70.,
-                                 distance=100.)
-
-   >>> mapping.map_disk(power_law=(0., 0.1, 1.15),
-                        radius=(1., 500., 100))
-
-   >>> mapping.deproject_disk()
-
-   >>> mapping.r2_scaling(r_max=200.)
-
-   >>> mapping.total_intensity(pol_max=1.)
-
-   >>> mapping.phase_function(radius=(50., 70.),
-                              n_phase=30)
-
-   >>> mapping.write_output(filename='diskmap')
+Documentation can be found at `http://diskmap.readthedocs.io <http://diskmap.readthedocs.io>`_.
 
 
 Attribution
