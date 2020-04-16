@@ -27,27 +27,10 @@
 
 Python tool for scattered light mapping of protoplanetary disks. The disk surface is parameterized with a power law profile or read from an input file. The projected radius and scattering angle is then calculated at each pixel. From this, a deprojected image, a stellar irradiation corrected image, and a scattering phase function can be extracted.
 
-Installation
-------------
-
-Installation from PyPI:
-
-.. code-block:: console
-
-    $ pip install diskmap
-
-Installation from Github:
-
-.. code-block:: console
-
-    $ git clone git@github.com:tomasstolker/diskmap.git
-    $ python setup.py install
-
 Documentation
 -------------
 
 Documentation can be found at `http://diskmap.readthedocs.io <http://diskmap.readthedocs.io>`_.
-
 
 Attribution
 -----------
