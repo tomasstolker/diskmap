@@ -6,7 +6,7 @@ About
 Questions & feedback
 --------------------
 
-*diskmap* was developed by Tomas Stolker (tomas.stolker@phys.ethz.ch). Feel free to send an email for questions, comments, or suggestions.
+*diskmap* has been developed by Tomas Stolker (stolker@strw.leidenuniv.nl). Feel free to send an email for questions, comments, or suggestions.
 
 Attribution
 -----------

@@ -1,29 +1,26 @@
 *diskmap*
 =========
 
-.. image:: https://badge.fury.io/py/diskmap.svg
-    :target: https://badge.fury.io/py/diskmap
+.. image:: https://img.shields.io/pypi/v/diskmap
+   :target: https://pypi.python.org/pypi/diskmap
 
-.. image:: https://img.shields.io/badge/Python-3.6%2C%203.7-yellow.svg?style=flat
-    :target: https://pypi.python.org/pypi/diskmap
+.. image:: https://img.shields.io/pypi/pyversions/diskmap
+   :target: https://pypi.python.org/pypi/diskmap
 
-.. image:: https://travis-ci.org/tomasstolker/diskmap.svg?branch=master
-    :target: https://travis-ci.org/tomasstolker/diskmap
+.. image:: https://img.shields.io/travis/tomasstolker/diskmap
+   :target: https://travis-ci.org/tomasstolker/diskmap
 
-.. image:: https://readthedocs.org/projects/diskmap/badge/?version=latest
-    :target: http://diskmap.readthedocs.io/en/latest/?badge=latest
+.. image:: https://img.shields.io/readthedocs/diskmap
+   :target: http://diskmap.readthedocs.io
 
-.. image:: https://coveralls.io/repos/github/tomasstolker/diskmap/badge.svg
+.. image:: https://img.shields.io/coveralls/github/tomasstolker/diskmap
    :target: https://coveralls.io/github/tomasstolker/diskmap
 
-.. image:: https://www.codefactor.io/repository/github/tomasstolker/diskmap/badge
+.. image:: https://img.shields.io/codefactor/grade/github/tomasstolker/diskmap
    :target: https://www.codefactor.io/repository/github/tomasstolker/diskmap
 
-.. image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
-    :target: https://github.com/tomasstolker/diskmap/blob/master/LICENSE
-
-.. image:: https://img.shields.io/badge/arXiv-1609.09505-orange.svg?style=flat
-    :target: https://arxiv.org/abs/1609.09505
+.. image:: https://img.shields.io/github/license/tomasstolker/diskmap
+   :target: https://github.com/tomasstolker/diskmap/blob/master/LICENSE
 
 Python tool for scattered light mapping of protoplanetary disks. The disk surface is parameterized with a power law profile or read from an input file. The projected radius and scattering angle is then calculated at each pixel. From this, a deprojected image, a stellar irradiation corrected image, and a scattering phase function can be extracted.
 
@@ -45,6 +42,6 @@ Contributions are welcome, please consider forking the repository and creating a
 License
 -------
 
-Copyright 2020 Tomas Stolker
+Copyright 2020-2021 Tomas Stolker
 
 *diskmap* is distributed under the MIT License. See the LICENSE file for the terms and conditions.

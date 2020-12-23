@@ -2,14 +2,15 @@
 Module with mapping functionalities for protoplanetary disks.
 """
 
-from typing import Tuple
-
 import math
+
+from typing import Optional, Tuple
+
 import numpy as np
 
 from astropy.io import fits
-from typeguard import typechecked
 from scipy.interpolate import griddata, interp1d
+from typeguard import typechecked
 
 
 class DiskMap:
@@ -55,12 +56,10 @@ class DiskMap:
         if self.image.shape[0] != self.image.shape[1]:
             raise ValueError('The dimensions of the image should have the same size.')
 
-        self.pixscale = pixscale  # [arcsec]
-        self.incl = math.radians(inclination)  # [rad]
-        self.pos_ang = math.radians(pos_angle)  # [rad]
-        self.distance = distance  # [pc]
-
-        self.npix = self.image.shape[0]
+        self.pixscale = pixscale  # (arcsec)
+        self.incl = math.radians(inclination)  # (rad)
+        self.pos_ang = math.radians(pos_angle)  # (rad)
+        self.distance = distance  # (pc)
 
         self.grid = 501  # should be odd
 
@@ -73,12 +72,28 @@ class DiskMap:
         self.stokes_i = None
         self.phase = None
 
+        # sum_before = np.sum(self.image)
+
+        # im_scale = rescale(image=np.asarray(self.image, dtype=np.float64),
+        #                    scale=(10., 10.),
+        #                    order=5,
+        #                    mode='reflect',
+        #                    anti_aliasing=True,
+        #                    multichannel=False)
+
+        # sum_after = np.sum(im_scale)
+
+        # self.image = im_scale * (sum_before / sum_after)
+        # self.pixscale /= 10.
+
+        self.npix = self.image.shape[0]
+
     @typechecked
     def map_disk(self,
                  power_law: Tuple[float, float, float],
                  radius: Tuple[float, float, int] = (1., 500., 100),
                  surface: str = 'power-law',
-                 filename: str = None) -> None:
+                 filename: Optional[str] = None) -> None:
         """
         Function for mapping a scattered light image to a power-law disk surface.
 
@@ -96,7 +111,7 @@ class DiskMap:
             a look at the `_radius.fits` output.
         surface : str
             Parameterization type for the disk surface ('power-law' or 'file').
-        filename : star
+        filename : star, None
             Filename which contains the radius in au (first column) and the height of the disk
             surface in au (second column).
 
@@ -120,13 +135,13 @@ class DiskMap:
 
                 return a_power + b_power*x_power**c_power
 
-            # midplane radius [au]
+            # midplane radius (au)
             disk_radius = np.linspace(radius[0], radius[1], radius[2])
 
-            # disk height [au]
+            # disk height (au)
             disk_height = power_law_height(disk_radius, power_law[0], power_law[1], power_law[2])
 
-            # opening angle [rad]
+            # opening angle (rad)
             disk_opening = np.arctan2(disk_height, disk_radius)
 
         elif surface == 'file':
@@ -135,20 +150,20 @@ class DiskMap:
 
             data = np.loadtxt(filename)
 
-            # midplane radius [au]
+            # midplane radius (au)
             disk_radius = np.linspace(radius[0], radius[1], radius[2])
 
-            # disk height [au]
+            # disk height (au)
             height_interp = interp1d(data[:, 0], data[:, 1])
             disk_height = height_interp(disk_radius)
 
-            # opening angle [rad]
-            disk_opening = np.arctan2(disk_height, disk_radius)  # [au]
+            # opening angle (rad)
+            disk_opening = np.arctan2(disk_height, disk_radius)  # (au)
 
         # Project disk height to image plane
 
-        disk_phi = np.linspace(0., 359., 360)  # [deg]
-        disk_phi = np.radians(disk_phi)  # [rad]
+        disk_phi = np.linspace(0., 359., 360)  # (deg)
+        disk_phi = np.radians(disk_phi)  # (rad)
 
         x_im = []
         y_im = []
@@ -161,6 +176,7 @@ class DiskMap:
             for j, p_item in enumerate(disk_phi):
 
                 x_tmp = r_item * np.sin(p_item)
+
                 y_tmp = disk_height[i]*math.sin(self.incl) - \
                     r_item*np.cos(p_item)*math.cos(self.incl)
 
@@ -228,8 +244,8 @@ class DiskMap:
             x_grid = np.linspace(-(self.npix-1)/2, (self.npix-1)/2, self.npix)
             y_grid = np.linspace(-(self.npix-1)/2, (self.npix-1)/2, self.npix)
 
-        x_grid *= self.pixscale*self.distance  # [au]
-        y_grid *= self.pixscale*self.distance  # [au]
+        x_grid *= self.pixscale*self.distance  # (au)
+        y_grid *= self.pixscale*self.distance  # (au)
 
         grid = np.zeros((self.npix**2, 2))
 
@@ -242,10 +258,10 @@ class DiskMap:
 
                 count += 1
 
-        fit_radius = griddata(image_xy, r_im, grid)
-        fit_azimuth = griddata(image_xy, p_im, grid)
-        fit_opening = griddata(image_xy, o_im, grid)
-        fit_scatter = griddata(image_xy, s_im, grid)
+        fit_radius = griddata(image_xy, r_im, grid, method='linear')
+        fit_azimuth = griddata(image_xy, p_im, grid, method='linear')
+        fit_opening = griddata(image_xy, o_im, grid, method='linear')
+        fit_scatter = griddata(image_xy, s_im, grid, method='linear')
 
         self.radius = np.zeros((self.npix, self.npix))
         self.azimuth = np.zeros((self.npix, self.npix))
@@ -334,8 +350,8 @@ class DiskMap:
             x_grid = np.linspace(-(self.npix-1)/2, (self.npix-1)/2, self.npix)
             y_grid = np.linspace(-(self.npix-1)/2, (self.npix-1)/2, self.npix)
 
-        x_grid *= self.pixscale*self.distance  # [au]
-        y_grid *= self.pixscale*self.distance  # [au]
+        x_grid *= self.pixscale*self.distance  # (au)
+        y_grid *= self.pixscale*self.distance  # (au)
 
         grid = np.zeros((self.npix**2, 2))
 
@@ -349,7 +365,8 @@ class DiskMap:
                 count += 1
 
         try:
-            fit_im = griddata(image_xy, im_disk, grid)
+            fit_im = griddata(image_xy, im_disk, grid, method='linear')
+
         except ValueError:
             raise ValueError('The radius sampling should cover the complete field of view of the '
                              'image. Try increasing the outer \'radius\' value in \'map_disk\' '
@@ -551,7 +568,7 @@ class DiskMap:
             fits.writeto(f'{filename}_total_intensity.fits', self.stokes_i, overwrite=True)
 
         if self.phase is not None:
-            header = 'Scattering angle [deg] - Polarized intensity [a.u.] - Uncertainty [a.u.] ' \
-                     '- Total intensity [a.u.] - Uncertainty [a.u.]'
+            header = 'Scattering angle (deg) - Polarized intensity (a.u.) - Uncertainty (a.u.) ' \
+                     '- Total intensity (a.u.) - Uncertainty (a.u.)'
 
             np.savetxt(f'{filename}_phase_function.dat', self.phase, header=header)

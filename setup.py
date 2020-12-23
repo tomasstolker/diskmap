@@ -2,13 +2,11 @@
 
 from setuptools import setup
 
-try:
-    from pip._internal.req import parse_requirements
-except ImportError:
-    from pip.req import parse_requirements
+from pip._internal.network.session import PipSession
+from pip._internal.req import parse_requirements
 
-reqs = parse_requirements('requirements.txt', session='hack')
-reqs = [str(ir.req) for ir in reqs]
+reqs = parse_requirements('requirements.txt', session=PipSession())
+reqs = [str(req.requirement) for req in reqs]
 
 setup(
     name='diskmap',
@@ -17,10 +15,10 @@ setup(
     long_description=open('README.rst').read(),
     long_description_content_type='text/x-rst',
     author='Tomas Stolker',
-    author_email='tomas.stolker@phys.ethz.ch',
+    author_email='stolker@strw.leidenuniv.nl',
     url='https://github.com/tomasstolker/diskmap',
     packages=['diskmap'],
-    package_dir={'diskmap':'diskmap'},
+    package_dir={'diskmap': 'diskmap'},
     include_package_data=True,
     install_requires=reqs,
     license='MIT',
@@ -34,5 +32,6 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
 )
