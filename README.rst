@@ -22,7 +22,7 @@
 .. image:: https://img.shields.io/github/license/tomasstolker/diskmap
    :target: https://github.com/tomasstolker/diskmap/blob/master/LICENSE
 
-Python tool for scattered light mapping of protoplanetary disks. The disk surface is parameterized with a power law profile or read from an input file. The projected radius and scattering angle is then calculated at each pixel. From this, a deprojected image, a stellar irradiation corrected image, and a scattering phase function can be extracted.
+*diskmap* is a tool for scattered light mapping of protoplanetary disks. The disk surface is parameterized with a power law profile or read from an input file. The projected radius and scattering angle are then calculated at each pixel. From this, a 3D deprojected image and a stellar irradiation corrected image are computed. Also a polarized scattering phase function is extracted and an total intensity phase function is estimated.
 
 Documentation
 -------------

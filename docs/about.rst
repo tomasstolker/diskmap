@@ -16,4 +16,4 @@ Please cite `Stolker et al. (2016) <https://ui.adsabs.harvard.edu/abs/2016A%26A.
 Contributing
 ------------
 
-Contributions are very welcome, please consider `forking <https://help.github.com/en/articles/fork-a-repo>`_ the repository and creating a `pull request <https://github.com/tomasstolker/diskmap/pulls>`_. Bug reports can be provided by creating an `issue <https://github.com/tomasstolker/diskmap/issues>`_ on the Github page.
+Contributions are welcome, please consider `forking <https://help.github.com/en/articles/fork-a-repo>`_ the repository and creating a `pull request <https://github.com/tomasstolker/diskmap/pulls>`_. Bug reports can be provided by creating an `issue <https://github.com/tomasstolker/diskmap/issues>`_ on the Github page.

@@ -1,8 +1,11 @@
-.PHONY: help pypi pypi-test docs clean
+.PHONY: help pypi pypi-test docs coverage test clean
 
 help:
 	@echo "pypi - submit package to the PyPI server"
 	@echo "pypi-test - submit package to the TestPyPI server"
+	@echo "docs - generate Sphinx documentation"
+	@echo "coverage - check code coverage"
+	@echo "test - run test cases"
 	@echo "clean - remove all artifacts"
 
 pypi:
@@ -19,6 +22,13 @@ docs:
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 
+coverage:
+	coverage run --source=diskmap -m pytest
+	coverage report -m
+
+test:
+	pytest --cov=diskmap/
+
 clean:
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -rf {} +
@@ -29,4 +39,5 @@ clean:
 	rm -rf build/
 	rm -rf dist/
 	rm -rf diskmap.egg-info/
+	rm -rf .pytest_cache/
 	rm -f .coverage

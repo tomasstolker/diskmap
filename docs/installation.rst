@@ -3,18 +3,18 @@
 Installation
 ============
 
-*diskmap* is compatible with Python 3.6/3.7/3.8 and is available in the |pypi| and on |github|.
+*diskmap* is compatible with Python 3.6/3.7/3.8 and available through `PyPI <https://pypi.org/project/diskmap/>`_ and `Github <https://github.com/tomasstolker/diskmap>`_.
 
 Installation from PyPI
 ----------------------
 
-*diskmap* can be installed with the |pip|:
+*diskmap* can be installed with the `pip package manager <https://packaging.python.org/tutorials/installing-packages/>`_:
 
 .. code-block:: console
 
     $ pip install diskmap
 
-And to update to the most recent version:
+Or to update the package to the most recent version:
 
 .. code-block:: console
 
@@ -29,7 +29,7 @@ Installation from Github is done by cloning the repository:
 
     $ git clone git@github.com:tomasstolker/diskmap.git
 
-And running the setup script to install the package and its dependencies:
+And running the setup script to install *diskmap* and its dependencies:
 
 .. code-block:: console
 
@@ -41,26 +41,14 @@ Once a local copy of the repository exists, new commits can be pulled from Githu
 
     $ git pull origin master
 
-Do you want to makes changes to the code? Then please fork the `diskmap` repository on the Github page and clone your own fork instead of the main repository. Contributions and pull requests are very welcome (see :ref:`about` section).
+Do you want to makes changes to the code? Then please fork the `diskmap` repository on the Github page and clone your own fork instead of the main repository. Contributions and pull requests are welcome (see :ref:`about` section).
 
 Testing `diskmap`
 -----------------
 
-The installation can be tested by starting Python in interactive mode and printing the `diskmap` version:
+The installation can be tested by starting Python in interactive mode, importing *diskmap*, and printing the installed version number:
 
 .. code-block:: python
 
     >>> import diskmap
     >>> diskmap.__version__
-
-.. |pypi| raw:: html
-
-   <a href="https://pypi.org/project/diskmap/" target="_blank">PyPI repository</a>
-
-.. |github| raw:: html
-
-   <a href="https://github.com/tomasstolker/diskmap" target="_blank">Github</a>
-
-.. |pip| raw:: html
-
-   <a href="https://packaging.python.org/tutorials/installing-packages/" target="_blank">pip package manager</a>

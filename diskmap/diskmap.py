@@ -3,8 +3,9 @@ Module with mapping functionalities for protoplanetary disks.
 """
 
 import math
+import warnings
 
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple
 
 import numpy as np
 
@@ -24,22 +25,27 @@ class DiskMap:
                  pixscale: float,
                  inclination: float,
                  pos_angle: float,
-                 distance: float) -> None:
+                 distance: float,
+                 image_type: str = 'polarized') -> None:
         """
         Parameters
         ----------
         fitsfile : str
-            FITS file with the scattered light imaged.
+            FITS file with the scattered light image.
         pixscale : float
-            Pixel scale (arcsec).
+            Pixel scale (arcsec per pixel).
         inclination : float
             Inclination of the disk (deg). Include a minus sign to exchange the near and far side
-            in the mapping of the disk.
+            with the mapping of the disk.
         pos_angle : float
             Position angle of the disk (deg). Defined in counterclockwise direction with respect
             to the vertical axis (i.e. east of north).
         distance : float
             Distance (pc).
+        image_type : str
+            Image type ('polarized' or 'total'). This parameter affects the output that will be
+            stored. For example, the conversion from polarized to total intensity phase function
+            is only done with `image_type='polarized'`.
 
         Returns
         -------
@@ -50,16 +56,26 @@ class DiskMap:
         self.image = fits.getdata(fitsfile)
         self.image = np.nan_to_num(self.image)
 
-        if self.image.ndim != 2:
+        if self.image.ndim == 3:
+            warn.warnings('The FITS file contains a 3D data cube so using the first image.')
+
+            self.image = self.image[0, ]
+
+        elif self.image.ndim != 2:
             raise ValueError('DiskMap requires a 2D image.')
 
         if self.image.shape[0] != self.image.shape[1]:
             raise ValueError('The dimensions of the image should have the same size.')
 
+        if image_type not in ['polarized', 'total']:
+            raise ValueError('The argument of \'image_type\' should be set to \'polarized\' '
+                             'or \'total\'.')
+
         self.pixscale = pixscale  # (arcsec)
         self.incl = math.radians(inclination)  # (rad)
         self.pos_ang = math.radians(pos_angle)  # (rad)
         self.distance = distance  # (pc)
+        self.image_type = image_type
 
         self.grid = 501  # should be odd
 
@@ -120,8 +136,6 @@ class DiskMap:
         NoneType
             None
         """
-
-        # Create geometric disk model
 
         if surface == 'power-law':
 
@@ -280,9 +294,10 @@ class DiskMap:
                 count += 1
 
     @typechecked
-    def deproject_disk(self) -> None:
+    def sort_disk(self) -> Tuple[List[np.float64], np.ndarray]:
         """
-        Function for deprojecting a disk surface based on the mapping of ``map_disk``.
+        Function for creating a list with pixel values and creating a 2D array with the x and y
+        pixel coordinates.
 
         Returns
         -------
@@ -290,10 +305,7 @@ class DiskMap:
             None
         """
 
-        # Deproject disk surface
-
-        if self.radius is None or self.azimuth is None:
-            raise ValueError('Please run \'map_disk\' and before using \'deproject_disk\'.')
+        # Create lists with x and y coordinates and pixel values
 
         x_disk = []
         y_disk = []
@@ -323,22 +335,41 @@ class DiskMap:
             y_sort[i] = y_disk[x_index[i]]
             im_sort[i] = im_disk[x_index[i]]
 
-        grid_xy = np.zeros((self.grid**2, 2))
-
-        count = 0
-
-        for i in range(-(self.grid-1)//2, (self.grid-1)//2+1):
-            for j in range(-(self.grid-1)//2, (self.grid-1)//2+1):
-                grid_xy[count, 0] = float(i)
-                grid_xy[count, 1] = float(j)
-
-                count += 1
+        # count = 0
+        #
+        # grid_xy = np.zeros((self.grid**2, 2))
+        #
+        # for i in range(-(self.grid-1)//2, (self.grid-1)//2+1):
+        #     for j in range(-(self.grid-1)//2, (self.grid-1)//2+1):
+        #         grid_xy[count, 0] = float(i)
+        #         grid_xy[count, 1] = float(j)
+        #
+        #         count += 1
 
         image_xy = np.zeros((len(y_disk), 2))
 
         for i, _ in enumerate(y_disk):
             image_xy[i, 0] = x_disk[i]
             image_xy[i, 1] = y_disk[i]
+
+        return im_disk, image_xy
+
+    @typechecked
+    def deproject_disk(self) -> None:
+        """
+        Function for deprojecting a disk surface based on the mapping of
+        :meth:`~diskmap.diskmap.DiskMap.map_disk`.
+
+        Returns
+        -------
+        NoneType
+            None
+        """
+
+        if self.radius is None or self.azimuth is None:
+            raise ValueError('The disk has not been mapped yet with the \'map_disk\' method.')
+
+        im_disk, image_xy = self.sort_disk()
 
         # Interpolate disk plane
 
@@ -401,8 +432,6 @@ class DiskMap:
             None
         """
 
-        # r^2 scaling
-
         if self.radius is None:
             raise ValueError('Please run \'map_disk\' before using \'r2_scaling\'.')
 
@@ -420,14 +449,15 @@ class DiskMap:
     def total_intensity(self,
                         pol_max: 1.) -> None:
         """
-        Function for estimating the total intensity image when ``fitsfile`` contains a polarized
-        light image. A Rayleigh phase function is assumed and effects of multiple are ignored.
+        Function for estimating the (stellar irradiation corrected) total intensity image when
+        ``fitsfile`` contains a polarized light image and ``image_type='polarized'``. A bell-shaped
+        degree of polarized is assumed and effects of multiple scattering are ignored.
 
         Parameters
         ----------
         pol_max : float
-            The peak of the Rayleigh phase function, which normalizes the estimated total
-            intensity image.
+            The peak of the bell-shaped degree of polarization, which effectively normalizes the
+            estimated total intensity image.
 
         Returns
         -------
@@ -435,13 +465,15 @@ class DiskMap:
             None
         """
 
-        # Total intensity
+        if self.image_type != 'polarized':
+            raise ValueError('The \'total_intensity\' method should only be used if the input '
+                             'image is a polarized light image (i.e. image_type=\'polarized\').')
 
         if self.scatter is None or self.im_scaled is None:
             raise ValueError('Please run \'map_disk\' before using \'total_intensity\'.')
 
         alpha = np.cos(self.scatter)
-        deg_pol = -pol_max*(alpha*alpha-1.)/(alpha*alpha+1.)
+        deg_pol = -pol_max * (alpha**2 - 1.) / (alpha**2 + 1.)
 
         self.stokes_i = self.im_scaled / deg_pol
 
@@ -450,10 +482,12 @@ class DiskMap:
                        radius: Tuple[float, float],
                        n_phase: int):
         """
-        Function for estimating the polarized and total intensity phase function when ``fitsfile``
-        contains a polarized light image. A Rayleigh phase function is assumed and effects of
-        multiple are ignored. Pixel values are scaled by r^2 such that irradiation effects do not
-        affect the result, which is extracted in arbitrary units.
+        Function for extracting the phase function. If ``image_type='polarized'``, the polarized
+        phase function is extracted and the total intensity phase function is estimated by assuming
+        a bell-shaped degree of polarization. If ``image_type='polarized'``, the total intensity
+        phase function is extracted. The extracting is done on the r$^2$-scaled pixel values
+        such that the phase function is not biased by irradiation effects. The phase functions are
+        have been normalized by their maximum value.
 
         Parameters
         ----------
@@ -468,8 +502,6 @@ class DiskMap:
         NoneType
             None
         """
-
-        # Phase function
 
         # Phase function is normalizedf so pol_max has not effect
         pol_max = 1.
@@ -513,25 +545,29 @@ class DiskMap:
                 pol_flux.append(np.nanmean(im_bins[i]))
                 pol_error.append(np.nanstd(im_bins[i])/math.sqrt(len(im_bins[i])))
 
-        # Degree of polarization
+        if self.image_type == 'polarized':
+            # Degree of polarization
 
-        alpha = np.cos(np.array(angle)*np.pi/180.)
-        deg_pol = -pol_max*(alpha*alpha-1.)/(alpha*alpha+1.)
+            alpha = np.cos(np.array(angle)*np.pi/180.)
+            deg_pol = -pol_max*(alpha*alpha-1.)/(alpha*alpha+1.)
 
-        tot_flux = pol_flux/deg_pol
-        tot_error = pol_error/deg_pol
+            tot_flux = pol_flux/deg_pol
+            tot_error = pol_error/deg_pol
 
-        # Normalization
+            # Normalization
 
-        flux_norm = max(pol_flux)
-        pol_flux = np.array(pol_flux)/flux_norm
-        pol_error = np.array(pol_error)/flux_norm
+            flux_norm = max(pol_flux)
+            pol_flux = np.array(pol_flux)/flux_norm
+            pol_error = np.array(pol_error)/flux_norm
 
-        flux_norm = max(tot_flux)
-        tot_flux = np.array(tot_flux)/flux_norm
-        tot_error = np.array(tot_error)/flux_norm
+            flux_norm = max(tot_flux)
+            tot_flux = np.array(tot_flux)/flux_norm
+            tot_error = np.array(tot_error)/flux_norm
 
-        self.phase = np.column_stack([angle, pol_flux, pol_error, tot_flux, tot_error])
+            self.phase = np.column_stack([angle, pol_flux, pol_error, tot_flux, tot_error])
+
+        else:
+            self.phase = np.column_stack([angle, pol_flux, pol_error])
 
     @typechecked
     def write_output(self,
@@ -550,8 +586,6 @@ class DiskMap:
             None
         """
 
-        # Write FITS output
-
         if self.radius is not None:
             fits.writeto(f'{filename}_radius.fits', self.radius, overwrite=True)
 
@@ -568,7 +602,11 @@ class DiskMap:
             fits.writeto(f'{filename}_total_intensity.fits', self.stokes_i, overwrite=True)
 
         if self.phase is not None:
-            header = 'Scattering angle (deg) - Polarized intensity (a.u.) - Uncertainty (a.u.) ' \
-                     '- Total intensity (a.u.) - Uncertainty (a.u.)'
+            if self.image_type == 'polarized':
+                header = 'Scattering angle (deg) - Normalized polarized flux - Error ' \
+                         '- Normalized total flux - Error'
+
+            else:
+                header = 'Scattering angle (deg) - Normalized total flux - Error'
 
             np.savetxt(f'{filename}_phase_function.dat', self.phase, header=header)
