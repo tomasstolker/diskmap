@@ -33,15 +33,20 @@ class DiskMap:
         fitsfile : str
             FITS file with the scattered light image.
         pixscale : float
-            Pixel scale (arcsec per pixel).
+            Pixel scale of the image (arcsec per pixel).
         inclination : float
-            Inclination of the disk (deg). Include a minus sign to exchange the near and far side
-            with the mapping of the disk.
+            Inclination of the disk (deg). The convention is such that the near side of the
+            disk is on the right side of the image when using an inclination between 0 and 90 deg
+            and using a `pos_angle` of 0 deg. The near and far side of the disk mapping can be
+            exchanged by using a minus sign for the inclination. To be certain about using the
+            correct near and far side, it is best to check the `_radius.fits` file with a somewhat
+            large inclination. The near side will show more strongly compressed radii compared to
+            the far side of the disk.
         pos_angle : float
             Position angle of the disk (deg). Defined in counterclockwise direction with respect
             to the vertical axis (i.e. east of north).
         distance : float
-            Distance (pc).
+            Distance between observer and star (pc).
         image_type : str
             Image type ('polarized' or 'total'). This parameter affects the output that will be
             stored. For example, the conversion from polarized to total intensity phase function
