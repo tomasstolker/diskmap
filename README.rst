@@ -8,7 +8,7 @@
    :target: https://pypi.python.org/pypi/diskmap
 
 .. image:: https://img.shields.io/travis/tomasstolker/diskmap
-   :target: https://travis-ci.org/tomasstolker/diskmap
+   :target: https://travis-ci.com/tomasstolker/diskmap
 
 .. image:: https://img.shields.io/readthedocs/diskmap
    :target: http://diskmap.readthedocs.io
