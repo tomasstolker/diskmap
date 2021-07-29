@@ -62,7 +62,7 @@ class DiskMap:
         self.image = np.nan_to_num(self.image)
 
         if self.image.ndim == 3:
-            warn.warnings('The FITS file contains a 3D data cube so using the first image.')
+            warnings.warn('The FITS file contains a 3D data cube so using the first image.')
 
             self.image = self.image[0, ]
 

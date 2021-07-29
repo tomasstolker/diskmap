@@ -7,8 +7,8 @@
 .. image:: https://img.shields.io/pypi/pyversions/diskmap
    :target: https://pypi.python.org/pypi/diskmap
 
-.. image:: https://img.shields.io/travis/tomasstolker/diskmap
-   :target: https://travis-ci.com/tomasstolker/diskmap
+.. image:: https://github.com/tomasstolker/diskmap/workflows/CI/badge.svg?branch=master
+   :target: https://github.com/tomasstolker/diskmap/actions
 
 .. image:: https://img.shields.io/readthedocs/diskmap
    :target: http://diskmap.readthedocs.io
