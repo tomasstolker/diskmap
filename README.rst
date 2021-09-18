@@ -7,7 +7,7 @@
 .. image:: https://img.shields.io/pypi/pyversions/diskmap
    :target: https://pypi.python.org/pypi/diskmap
 
-.. image:: https://github.com/tomasstolker/diskmap/workflows/CI/badge.svg?branch=master
+.. image:: https://github.com/tomasstolker/diskmap/workflows/CI/badge.svg?branch=main
    :target: https://github.com/tomasstolker/diskmap/actions
 
 .. image:: https://img.shields.io/readthedocs/diskmap
@@ -20,7 +20,7 @@
    :target: https://www.codefactor.io/repository/github/tomasstolker/diskmap
 
 .. image:: https://img.shields.io/github/license/tomasstolker/diskmap
-   :target: https://github.com/tomasstolker/diskmap/blob/master/LICENSE
+   :target: https://github.com/tomasstolker/diskmap/blob/main/LICENSE
 
 .. image:: https://mybinder.org/badge_logo.svg
  :target: https://mybinder.org/v2/gh/tomasstolker/diskmap/HEAD
