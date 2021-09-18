@@ -17,6 +17,7 @@ pypi-test:
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 docs:
+	rm -rf docs/api
 	sphinx-apidoc -o docs diskmap
 	cd docs/
 	$(MAKE) -C docs clean
@@ -36,6 +37,7 @@ clean:
 	rm -rf docs/*.fits
 	rm -rf docs/*.dat
 	rm -rf docs/_build/
+	rm -rf docs/api
 	rm -rf build/
 	rm -rf dist/
 	rm -rf diskmap.egg-info/

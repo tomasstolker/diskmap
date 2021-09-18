@@ -3,6 +3,7 @@
 .coverage
 .pytest_cache/
 docs/_build
+docs/api
 docs/.ipynb_checkpoints/*
 docs/*.fits
 docs/*.dat

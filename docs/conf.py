@@ -41,8 +41,12 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
+    'sphinx_automodapi.automodapi',
     'nbsphinx'
 ]
+
+# sphinx-automodapi
+numpydoc_show_class_members = False
 
 # Disable notebook timeout
 nbsphinx_timeout = -1

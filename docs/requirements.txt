@@ -1,4 +1,5 @@
 nbsphinx
 pandoc
 jupyter
+sphinx-automodapi
 sphinx_book_theme
