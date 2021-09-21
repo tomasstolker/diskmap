@@ -1,5 +1,3 @@
-.. module:: diskmap
-
 diskmap package
 ===============
 

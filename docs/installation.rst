@@ -39,7 +39,7 @@ Once a local copy of the repository exists, new commits can be pulled from Githu
 
 .. code-block:: console
 
-    $ git pull origin master
+    $ git pull origin main
 
 Do you want to makes changes to the code? Then please fork the `diskmap` repository on the Github page and clone your own fork instead of the main repository. Contributions and pull requests are welcome (see :ref:`about` section).
 

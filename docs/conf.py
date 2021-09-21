@@ -104,6 +104,7 @@ html_theme_options = {
     'use_issues_button': True,
     'use_repository_button': True,
     'use_download_button': True,
+    'logo_only': True,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -128,7 +129,7 @@ html_search_language = 'en'
 html_context = {'display_github': True,
                 'github_user': 'tomasstolker',
                 'github_repo': 'diskmap',
-                'github_version': 'master/docs/'}
+                'github_version': 'main/docs/'}
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
