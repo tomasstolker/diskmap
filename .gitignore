@@ -1,6 +1,7 @@
 *.pyc
 .DS_Store
 .coverage
+coverage.xml
 .pytest_cache/
 docs/_build
 docs/api

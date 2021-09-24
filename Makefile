@@ -28,7 +28,7 @@ coverage:
 	coverage report -m
 
 test:
-	pytest --cov=diskmap/
+	pytest --cov=diskmap/ --cov-report=xml
 
 clean:
 	find . -name '*.pyc' -exec rm -f {} +
@@ -43,3 +43,4 @@ clean:
 	rm -rf diskmap.egg-info/
 	rm -rf .pytest_cache/
 	rm -f .coverage
+	rm -f coverage.xml

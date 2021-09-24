@@ -13,8 +13,8 @@
 .. image:: https://img.shields.io/readthedocs/diskmap
    :target: http://diskmap.readthedocs.io
 
-.. image:: https://img.shields.io/coveralls/github/tomasstolker/diskmap
-   :target: https://coveralls.io/github/tomasstolker/diskmap
+.. image:: https://codecov.io/gh/tomasstolker/diskmap/branch/main/graph/badge.svg?token=UZ7OS5WR9C
+   :target: https://codecov.io/gh/tomasstolker/diskmap
 
 .. image:: https://img.shields.io/codefactor/grade/github/tomasstolker/diskmap
    :target: https://www.codefactor.io/repository/github/tomasstolker/diskmap
@@ -23,7 +23,7 @@
    :target: https://github.com/tomasstolker/diskmap/blob/main/LICENSE
 
 .. image:: https://mybinder.org/badge_logo.svg
- :target: https://mybinder.org/v2/gh/tomasstolker/diskmap/HEAD
+   :target: https://mybinder.org/v2/gh/tomasstolker/diskmap/HEAD
 
 *diskmap* is a tool for scattered light mapping of protoplanetary disks. The disk surface is parameterized with a power law profile or read from an input file. The projected radius and scattering angle are then calculated at each pixel. From this, a 3D deprojected image and a stellar irradiation corrected image are computed. Also a polarized scattering phase function is extracted and an total intensity phase function is estimated.
 
