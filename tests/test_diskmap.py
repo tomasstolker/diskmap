@@ -18,7 +18,8 @@ class TestDiskmap:
 
         self.limit = 1e-10
 
-    def teardown_class(self) -> None:
+    @staticmethod
+    def teardown_class() -> None:
 
         os.remove('image.fits')
         os.remove('diskmap_deprojected.fits')
@@ -53,21 +54,27 @@ class TestDiskmap:
         mapping.write_output(filename='diskmap')
 
         data = fits.getdata('diskmap_deprojected.fits')
-        assert np.nansum(data) == pytest.approx(62.24650962576587, rel=self.limit, abs=0.)
         assert data.shape == (51, 51)
+        assert np.nansum(data) == pytest.approx(
+            62.24650962576587, rel=self.limit, abs=0.)
 
         data = fits.getdata('diskmap_radius.fits')
-        assert np.sum(data) == pytest.approx(54749.27298678206, rel=self.limit, abs=0.)
+        assert np.sum(data) == pytest.approx(
+            54749.27298678206, rel=self.limit, abs=0.)
 
         data = fits.getdata('diskmap_r2_scaled.fits')
-        assert np.sum(data) == pytest.approx(27930.225422640284, rel=self.limit, abs=0.)
+        assert np.sum(data) == pytest.approx(
+            27930.225422640284, rel=self.limit, abs=0.)
 
         data = fits.getdata('diskmap_scat_angle.fits')
-        assert np.sum(data) == pytest.approx(232491.5391211969, rel=self.limit, abs=0.)
+        assert np.sum(data) == pytest.approx(
+            232491.5391211969, rel=self.limit, abs=0.)
 
         data = fits.getdata('diskmap_total_intensity.fits')
-        assert np.sum(data) == pytest.approx(38264.57782663277, rel=self.limit, abs=0.)
+        assert np.sum(data) == pytest.approx(
+            38264.57782663277, rel=self.limit, abs=0.)
 
         data = np.loadtxt('diskmap_phase_function.dat')
-        assert np.sum(data) == pytest.approx(998.046913483814, rel=self.limit, abs=0.)
         assert data.shape == (11, 5)
+        assert np.sum(data) == pytest.approx(
+            998.046913483814, rel=self.limit, abs=0.)

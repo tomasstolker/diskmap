@@ -1,0 +1,7 @@
+coverage:
+  status:
+    patch: false
+
+ignore:
+  - tests/*
+  - setup.py
