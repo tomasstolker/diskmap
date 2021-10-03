@@ -22,12 +22,6 @@ project = 'diskmap'
 copyright = '2020-2021, Tomas Stolker'
 author = 'Tomas Stolker'
 
-# The short X.Y version
-with open('../diskmap/__init__.py') as initfile:
-    for line in initfile:
-        if '__version__' in line:
-            version = line.split("'")[1]
-
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
