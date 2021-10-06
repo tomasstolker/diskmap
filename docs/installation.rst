@@ -8,7 +8,7 @@ Installation
 Installation from PyPI
 ----------------------
 
-*diskmap* can be installed with the `pip package manager <https://packaging.python.org/tutorials/installing-packages/>`_:
+*diskmap* can be installed from PyPI with the `pip package manager <https://packaging.python.org/tutorials/installing-packages/>`_:
 
 .. code-block:: console
 
@@ -23,13 +23,27 @@ Or to update the package to the most recent version:
 Installation from Github
 ------------------------
 
-Installation from Github is done by cloning the repository:
+Using pip
+^^^^^^^^^
+
+Installation from Github is also possible with ``pip``:
+
+.. code-block:: console
+
+   $ pip install git+git://github.com/tomasstolker/diskmap.git
+
+This will also install the required dependencies.
+
+Cloning the repository
+^^^^^^^^^^^^^^^^^^^^^^
+
+Alternatively, the Github repository can be cloned, which is in particular useful if you want to look into and/or make changes to the code
 
 .. code-block:: console
 
     $ git clone git@github.com:tomasstolker/diskmap.git
 
-And running the setup script to install *diskmap* and its dependencies:
+The package is installed by running the setup script:
 
 .. code-block:: console
 
