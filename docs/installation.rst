@@ -3,12 +3,12 @@
 Installation
 ============
 
-*diskmap* is compatible with Python 3.6/3.7/3.8/3.9 and available through `PyPI <https://pypi.org/project/diskmap/>`_ and `Github <https://github.com/tomasstolker/diskmap>`_.
+``diskmap`` is compatible with `Python <https://www.python.org>`_ versions 3.6/3.7/3.8/3.9 and available through `PyPI <https://pypi.org/project/diskmap/>`_ and `Github <https://github.com/tomasstolker/diskmap>`_.
 
 Installation from PyPI
 ----------------------
 
-*diskmap* can be installed from PyPI with the `pip package manager <https://packaging.python.org/tutorials/installing-packages/>`_:
+``diskmap`` can be installed from `PyPI <https://pypi.org/project/diskmap/>`_  with the `pip package manager <https://packaging.python.org/tutorials/installing-packages/>`_:
 
 .. code-block:: console
 
@@ -32,8 +32,6 @@ Installation from Github is also possible with ``pip``:
 
    $ pip install git+git://github.com/tomasstolker/diskmap.git
 
-This will also install the required dependencies.
-
 Cloning the repository
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -43,11 +41,11 @@ Alternatively, the Github repository can be cloned, which is in particular usefu
 
     $ git clone git@github.com:tomasstolker/diskmap.git
 
-The package is installed by running the setup script:
+The package is installed by running ``pip`` in the local cloned repository:
 
 .. code-block:: console
 
-    $ python setup.py install
+    $ pip install -e .
 
 Once a local copy of the repository exists, new commits can be pulled from Github with:
 
@@ -60,7 +58,7 @@ Do you want to makes changes to the code? Then please fork the `diskmap` reposit
 Testing `diskmap`
 -----------------
 
-The installation can be tested by starting Python in interactive mode, importing *diskmap*, and printing the installed version number:
+The installation can be tested by starting Python in interactive mode, importing ``diskmap``, and printing the installed version number:
 
 .. code-block:: python
 

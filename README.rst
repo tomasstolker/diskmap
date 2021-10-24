@@ -35,7 +35,7 @@ Documentation can be found at `http://diskmap.readthedocs.io <http://diskmap.rea
 Attribution
 -----------
 
-Please cite `Stolker et al. (2016) <https://ui.adsabs.harvard.edu/abs/2016A%26A...596A..70S>`_ whenever results from *diskmap* are used in a publication.
+Please cite `Stolker et al. (2016b) <https://ui.adsabs.harvard.edu/abs/2016A%26A...596A..70S>`_ whenever results from *diskmap* are used in a publication (see `arXiv <https://arxiv.org/abs/1609.09505>`_, `ADS <https://ui.adsabs.harvard.edu/abs/2016A%26A...596A..70S>`_, `BibTeX <https://ui.adsabs.harvard.edu/abs/2016A%26A...596A..70S/exportcitation>`_).
 
 Contributing
 ------------
