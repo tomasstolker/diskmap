@@ -40,11 +40,11 @@ Please cite `Stolker et al. (2016b) <https://ui.adsabs.harvard.edu/abs/2016A%26A
 Contributing
 ------------
 
-Contributions are welcome, please consider forking the repository and creating a pull request. Bug reports can be provided by creating an `issue <https://github.com/tomasstolker/diskmap/issues>`_ on the Github page.
+Contributions are welcome so please consider `forking <https://help.github.com/en/articles/fork-a-repo>`_ the repository and creating a `pull request <https://github.com/tomasstolker/diskmap/pulls>`_. Bug reports and feature requests can be provided by creating an `issue <https://github.com/tomasstolker/diskmap/issues>`_ on the Github page.
 
 License
 -------
 
-Copyright 2020-2021 Tomas Stolker
+Copyright 2020-2022 Tomas Stolker
 
 *diskmap* is distributed under the MIT License. See the LICENSE file for the terms and conditions.

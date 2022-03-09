@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('../'))
 # -- Project information -----------------------------------------------------
 
 project = 'diskmap'
-copyright = '2020-2021, Tomas Stolker'
+copyright = '2020-2022, Tomas Stolker'
 author = 'Tomas Stolker'
 
 

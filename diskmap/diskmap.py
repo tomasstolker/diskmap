@@ -5,12 +5,15 @@ Module with mapping functionalities for protoplanetary disks.
 import math
 import warnings
 
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
+import numpy.ma as ma
 
 from astropy.io import fits
+from astropy.stats import sigma_clip
 from scipy.interpolate import griddata, interp1d
+from scipy.ndimage import gaussian_filter, median_filter
 from typeguard import typechecked
 
 
@@ -20,20 +23,20 @@ class DiskMap:
     """
 
     @typechecked
-    def __init__(
-        self,
-        fitsfile: str,
-        pixscale: float,
-        inclination: float,
-        pos_angle: float,
-        distance: float,
-        image_type: str = "polarized",
-    ) -> None:
+    def __init__(self,
+                 fitsfile: Union[str, np.ndarray],
+                 pixscale: float,
+                 inclination: float,
+                 pos_angle: float,
+                 distance: float,
+                 image_type: str = 'polarized') -> None:
         """
         Parameters
         ----------
-        fitsfile : str
-            FITS file with the scattered light image.
+        fitsfile : str, np.ndarray
+            Name of the FITS file with the scattered light image.
+            Alternatively, a 2D ``numpy`` array with the image can
+            be directly provided.
         pixscale : float
             Pixel scale of the image (arcsec per pixel).
         inclination : float
@@ -65,7 +68,11 @@ class DiskMap:
             None
         """
 
-        self.image = fits.getdata(fitsfile)
+        if isinstance(fitsfile, str):
+            self.image = fits.getdata(fitsfile)
+        else:
+            self.image = fitsfile
+
         self.image = np.nan_to_num(self.image)
 
         if self.image.ndim == 3:
@@ -131,16 +138,21 @@ class DiskMap:
         filename: Optional[str] = None,
     ) -> None:
         """
-        Function for mapping a scattered light image to a power-law
-        disk surface.
+        Function for mapping a scattered light image to a height
+        profile (i.e. height of the scattering surface as function
+        of radius in the disk midplane) that is either parameterized
+        with a power-law function or read from an input file (for
+        example returned by a radiative transfer code).
 
         Parameters
         ----------
         power_law : tuple(float, float, float)
-            The argument for the power-law function, provided as
-            (a, b, c) with f(x) = a + b*x^c, with ``a`` and ``b`` in
-            au. Set all values to zero for the mapping and deprojection
-            of a geometrically flat disk, in which case only the
+            The height of the scattering surface is a power-law
+            function, :math:`h(r) = a + b*(r/1\\,\\mathrm{au})^c`,
+            with :math:`a`, :math:`b`, :math:`r`, and :math:`h(r)` in
+            au. The argument of ``power_law`` should be provided as
+            ``(a, b, c)``. Set all values to zero for the mapping
+            a geometrically flat disk, in which case only the
             inclination is used for the deprojection.
         radius : tuple(float, float, int)
             Radius points that are sampled, provided as (r_in, r_out,
@@ -151,7 +163,7 @@ class DiskMap:
         surface : str
             Parameterization type for the disk surface ('power-law' or
             'file').
-        filename : star, None
+        filename : str, None
             Filename which contains the radius in au (first column) and
             the height of the disk surface in au (second column).
 
@@ -455,7 +467,9 @@ class DiskMap:
                 count += 1
 
     @typechecked
-    def r2_scaling(self, r_max: float) -> None:
+    def r2_scaling(self,
+                   r_max: float,
+                   mask_planet: Optional[Tuple[int, int, float, float]] = None) -> None:
         """
         Function for correcting a scattered light image for the r^2
         decrease of the stellar irradiation of the disk surface.
@@ -466,6 +480,16 @@ class DiskMap:
             Maximum disk radius (au) for the r^2-scaling. Beyond this
             distance, a constant r^2-scaling is applied of value
             ``r_max``.
+        mask_planet : tuple(int, int, float, float), None
+            Mask for a planet such that it will not be scaled. The
+            tuple should have the following format:
+            ``(x_planet, y_planet, r_mask, scaling)``. Here,
+            ``x_planet`` and ``y_planet`` are the central pixel of
+            the planet position, ``r_mask`` is the size (in pixels)
+            of the planet signal, and ``scaling`` is the scaling
+            factor of the planet flux. This parameter is a bit
+            experimental and typically not used by setting the
+            argument to ``None``.
 
         Returns
         -------
@@ -476,15 +500,87 @@ class DiskMap:
         if self.radius is None:
             raise ValueError("Please run 'map_disk' before using 'r2_scaling'.")
 
+        if mask_planet is not None:
+            x_grid = np.linspace(-mask_planet[0], self.npix-mask_planet[0], self.npix)
+            y_grid = np.linspace(-mask_planet[1], self.npix-mask_planet[1], self.npix)
+
+            xx_grid, yy_grid = np.meshgrid(x_grid, y_grid)
+            rr_grid = np.sqrt(xx_grid**2 + yy_grid**2)
+
+        # self.low_snr = np.zeros((self.npix, self.npix))
+        #
+        # for i in range(3, self.npix-3):
+        #     for j in range(3, self.npix-3):
+        #         aperture = np.nansum(self.image[i-2:i+3, j-2:j+3])
+        #
+        #         if aperture > 90. and j < 157:
+        #             self.low_snr[i, j] = np.nan
+        #         else:
+        #             self.low_snr[i, j] = self.image[i, j].copy()
+        #
+        # std_low = np.nanstd(self.low_snr)
+        #
+        # for i in range(3, self.npix-3):
+        #     for j in range(3, self.npix-3):
+        #         if not np.isnan(self.low_snr[i, j]) and np.abs(self.image[i, j]) > 3.*std_low:
+        #             select = self.low_snr[i-3:i+4, j-3:j+4].copy()
+        #             select[3, 3] = np.nan
+        #
+        #             self.image[i, j] = np.nanmedian(select)
+
+        # self.low_snr = sigma_clip(self.low_snr, 5., maxiters=10)
+
+        # for k in range(2):
+        #     for i in range(3, self.npix-3):
+        #         for j in range(3, self.npix-3):
+        #             if not np.isnan(self.low_snr[i, j]):
+        #                 select = self.low_snr[i-3:i+4, j-3:j+4].copy()
+        #                 select[3, 3] = np.nan
+        #
+        #                 if self.image[i, j] > 0.5*np.nanstd(select):
+        #                     self.image[i, j] = np.nanmedian(select)
+
+        # for i in range(3, self.npix-3):
+        #     for j in range(3, self.npix-3):
+        #         if not np.isnan(self.high_snr[i, j]):
+        #             self.high_snr[i, j] = self.low_snr[i, j]
+        #         # elif type(self.low_snr[i, j]) is ma.core.MaskedConstant:
+        #         #     self.high_snr[i, j] = np.nansum(self.low_snr[i-2:i+3, j-2:j+3])
+        #         # else:
+        #         #     self.high_snr[i, j] = self.image[i, j]
+        #         else:
+        #             self.high_snr[i, j] = self.low_snr[i, j].copy()
+
+        # for k in range(2):
+        # for i in range(3, self.npix-3):
+        #     for j in range(3, self.npix-3):
+        #         if np.isnan(self.filt[i, j]):
+        #             select = self.image[i-2:i+3, j-2:j+3].copy()
+        #             select[2, 2] = np.nan
+        #
+        #             if np.abs(self.image[i, j]) > 1.5*np.nanstd(select):
+        #                 self.image[i, j] = np.nanmedian(select)
+
+        # self.filt[i, j] = median_filter(self.image, 2)
+        # self.image = self.high_snr.copy()
+
         self.im_scaled = np.zeros((self.npix, self.npix))
 
         for i in range(self.npix):
             for j in range(self.npix):
                 if self.radius[i, j] < r_max:
-                    self.im_scaled[i, j] = self.radius[i, j] ** 2 * self.image[i, j]
+                    if mask_planet is None or rr_grid[i, j] > mask_planet[2]:
+                        self.im_scaled[i, j] = self.radius[i, j]**2 * self.image[i, j]
+
+                    else:
+                        self.im_scaled[i, j] = mask_planet[3] * self.image[i, j]
 
                 else:
-                    self.im_scaled[i, j] = r_max ** 2 * self.image[i, j]
+                    if mask_planet is None or rr_grid[i, j] > mask_planet[2]:
+                        self.im_scaled[i, j] = r_max**2 * self.image[i, j]
+
+                    else:
+                        self.im_scaled[i, j] = mask_planet[3] * self.image[i, j]
 
     @typechecked
     def total_intensity(self, pol_max: 1.0) -> None:

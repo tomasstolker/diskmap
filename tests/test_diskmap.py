@@ -64,13 +64,13 @@ class TestDiskmap:
         data = fits.getdata("diskmap_radius.fits")
         assert np.sum(data) == pytest.approx(54749.27298678206, rel=self.limit, abs=0.0)
 
+        data = fits.getdata("diskmap_scat_angle.fits")
+        assert np.sum(data) == pytest.approx(232491.5391211969, rel=self.limit, abs=0.0)
+
         data = fits.getdata("diskmap_r2_scaled.fits")
         assert np.sum(data) == pytest.approx(
             27930.225422640284, rel=self.limit, abs=0.0
         )
-
-        data = fits.getdata("diskmap_scat_angle.fits")
-        assert np.sum(data) == pytest.approx(232491.5391211969, rel=self.limit, abs=0.0)
 
         data = fits.getdata("diskmap_total_intensity.fits")
         assert np.sum(data) == pytest.approx(38264.57782663277, rel=self.limit, abs=0.0)
@@ -78,3 +78,35 @@ class TestDiskmap:
         data = np.loadtxt("diskmap_phase_function.dat")
         assert data.shape == (11, 5)
         assert np.sum(data) == pytest.approx(998.046913483814, rel=self.limit, abs=0.0)
+
+    def test_mask_planet(self) -> None:
+
+        mapping = diskmap.DiskMap(
+            fitsfile="image.fits",
+            pixscale=1e-2,
+            inclination=30.0,
+            pos_angle=70.0,
+            distance=100.0,
+        )
+
+        mapping.map_disk(
+            power_law=(0.0, 0.01, 1.0),
+            radius=(1.0, 200.0, 100),
+            surface="power-law",
+            filename=None,
+        )
+
+        mapping.r2_scaling(r_max=30.0, mask_planet=(40, 40, 3, 5.))
+
+        mapping.write_output(filename="diskmap")
+
+        data = fits.getdata("diskmap_radius.fits")
+        assert np.sum(data) == pytest.approx(54749.27298678206, rel=self.limit, abs=0.0)
+
+        data = fits.getdata("diskmap_scat_angle.fits")
+        assert np.sum(data) == pytest.approx(232491.5391211969, rel=self.limit, abs=0.0)
+
+        data = fits.getdata("diskmap_r2_scaled.fits")
+        assert np.sum(data) == pytest.approx(
+            27723.286776644884, rel=self.limit, abs=0.0
+        )
