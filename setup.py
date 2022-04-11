@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 
-from setuptools import setup
+import pkg_resources
+import setuptools
 
-from pip._internal.network.session import PipSession
-from pip._internal.req import parse_requirements
+with open('requirements.txt') as req_txt:
+    parse_req = pkg_resources.parse_requirements(req_txt)
+    install_requires = [str(req) for req in parse_req]
 
-reqs = parse_requirements('requirements.txt', session=PipSession())
-reqs = [str(req.requirement) for req in reqs]
-
-setup(
+setuptools.setup(
     name='diskmap',
     version='0.1.4',
     description='Scattered light mapping of protoplanetary disks',
@@ -17,10 +16,9 @@ setup(
     author='Tomas Stolker',
     author_email='stolker@strw.leidenuniv.nl',
     url='https://github.com/tomasstolker/diskmap',
+    project_urls={'Documentation': 'https://diskmap.readthedocs.io'},
     packages=['diskmap'],
-    package_dir={'diskmap': 'diskmap'},
-    include_package_data=True,
-    install_requires=reqs,
+    install_requires=install_requires,
     license='MIT',
     zip_safe=False,
     keywords='diskmap',
