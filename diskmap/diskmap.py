@@ -83,6 +83,12 @@ class DiskMap:
             self.image = self.image[
                 0,
             ]
+            
+        if type(self.image[0,0]) == np.float32:
+            warnings.warn(
+                "The FITS file data is of type np.float32, this will be converted to np.float64"
+            )
+            self.image = self.image.astype(np.float64)
 
         elif self.image.ndim != 2:
             raise ValueError("DiskMap requires a 2D image.")
