@@ -90,16 +90,16 @@ class DiskMap:
         if self.image.shape[0] != self.image.shape[1]:
             raise ValueError("The dimensions of the image should have the same size.")
         
-        # if type(self.image[0,0]) == np.float32:
-        #     warnings.warn(
-        #         "The FITS file data is of type np.float32, this will be converted to np.float64"
-        #     )
-        #     self.image = self.image.astype(np.float64)
+        if type(self.image[0,0]) == np.float32:
+            warnings.warn(
+                "The FITS file data is of type np.float32, this will be converted to np.float64"
+            )
+            self.image = self.image.astype(np.float64)
             
-        # elif type(self.image[0,0]) != np.float64:
-        #     raise ValueError(
-        #         "The FITS file data should be either of type np.float32 or np.float64"
-        #     )
+        elif type(self.image[0,0]) != np.float64:
+            raise ValueError(
+                "The FITS file data should be either of type np.float32 or np.float64"
+            )
 
         if image_type not in ["polarized", "total"]:
             raise ValueError(
