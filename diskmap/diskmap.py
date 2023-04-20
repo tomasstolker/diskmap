@@ -35,8 +35,8 @@ class DiskMap:
         ----------
         fitsfile : str, np.ndarray
             Name of the FITS file with the scattered light image.
-            be directly provided.
             Alternatively, a 2D ``numpy`` array with the image can
+            be directly provided.
         pixscale : float
             Pixel scale of the image (arcsec per pixel).
         inclination : float
