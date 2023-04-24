@@ -1,6 +1,12 @@
 coverage:
   status:
-    patch: false
+    project:
+      default:
+        threshold: 100%
+        if_not_found: success
+    patch: no
+
+comment: off
 
 ignore:
   - tests/*

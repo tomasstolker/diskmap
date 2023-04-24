@@ -30,7 +30,7 @@ Installation from Github is also possible with ``pip``:
 
 .. code-block:: console
 
-   $ pip install git+git://github.com/tomasstolker/diskmap.git
+   $ pip install git+https://github.com/tomasstolker/diskmap.git
 
 Cloning the repository
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -39,7 +39,7 @@ Alternatively, the Github repository can be cloned, which is in particular usefu
 
 .. code-block:: console
 
-    $ git clone git@github.com:tomasstolker/diskmap.git
+    $ git clone https://github.com/tomasstolker/diskmap.git
 
 The package is installed by running ``pip`` in the local cloned repository:
 
