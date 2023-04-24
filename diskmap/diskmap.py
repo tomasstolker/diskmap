@@ -89,6 +89,17 @@ class DiskMap:
 
         if self.image.shape[0] != self.image.shape[1]:
             raise ValueError("The dimensions of the image should have the same size.")
+        
+        if self.image.dtype == np.float32 or self.image.dtype == np.dtype('>f4'):
+            warnings.warn(
+                "The FITS file data is of type float32, this will be converted to float64"
+            )
+            self.image = self.image.astype(np.float64)
+            
+        if self.image.dtype != np.float64 and self.image.dtype != np.dtype('>f8'):
+            raise ValueError(
+                f"The FITS file data should be either of type float32 or float64"
+            )
 
         if image_type not in ["polarized", "total"]:
             raise ValueError(
@@ -583,7 +594,7 @@ class DiskMap:
                         self.im_scaled[i, j] = mask_planet[3] * self.image[i, j]
 
     @typechecked
-    def total_intensity(self, pol_max: 1.0) -> None:
+    def total_intensity(self, pol_max: float = 1.0) -> None:
         """
         Function for estimating the (stellar irradiation corrected)
         total intensity image when ``fitsfile`` contains a polarized
