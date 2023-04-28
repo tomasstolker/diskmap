@@ -5,7 +5,7 @@ Module with mapping functionalities for protoplanetary disks.
 import math
 import warnings
 
-from typing import List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union, Callable
 
 import numpy as np
 import numpy.ma as ma
@@ -146,6 +146,7 @@ class DiskMap:
         power_law: Tuple[float, float, float],
         radius: Tuple[float, float, int] = (1.0, 500.0, 100),
         surface: str = "power-law",
+        height_func: Optional[Callable] = None,
         filename: Optional[str] = None,
     ) -> None:
         """
@@ -173,7 +174,11 @@ class DiskMap:
             present, have a look at the `_radius.fits` output.
         surface : str
             Parameterization type for the disk surface ('power-law' or
-            'file').
+            'function' or 'file').
+        height_func : callable, None
+            Function that returns the height of the scattering surface
+            as a function of radius. The radii and returned height must
+            be in au. 
         filename : str, None
             Filename which contains the radius in au (first column) and
             the height of the disk surface in au (second column).
@@ -202,6 +207,23 @@ class DiskMap:
             disk_height = power_law_height(
                 disk_radius, power_law[0], power_law[1], power_law[2]
             )
+
+            # opening angle (rad)
+            disk_opening = np.arctan2(disk_height, disk_radius)
+            
+        elif surface == "function":
+            
+            if height_func is None:
+                raise ValueError("If using surface=='function', you must specify height_func")
+            
+            # midplane radius (au)
+            disk_radius = np.linspace(radius[0], radius[1], radius[2])
+
+            # disk height (au)
+            try:
+                disk_height = height_func(disk_radius)
+            except TypeError:
+                raise ValueError("height_func must take only one argument, the radius in au.")
 
             # opening angle (rad)
             disk_opening = np.arctan2(disk_height, disk_radius)
