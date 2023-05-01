@@ -146,7 +146,7 @@ class DiskMap:
         power_law: Tuple[float, float, float],
         radius: Tuple[float, float, int] = (1.0, 500.0, 100),
         surface: str = "power-law",
-        height_func: Optional[Callable] = None,
+        height_func: Optional[Callable[[np.ndarray],np.ndarray]] = None,
         filename: Optional[str] = None,
     ) -> None:
         """
@@ -178,7 +178,7 @@ class DiskMap:
         height_func : callable, None
             Function that returns the height of the scattering surface
             as a function of radius. The radii and returned height must
-            be in au. 
+            be in au. Only used if surface='function'.
         filename : str, None
             Filename which contains the radius in au (first column) and
             the height of the disk surface in au (second column).
@@ -220,10 +220,7 @@ class DiskMap:
             disk_radius = np.linspace(radius[0], radius[1], radius[2])
 
             # disk height (au)
-            try:
-                disk_height = height_func(disk_radius)
-            except TypeError:
-                raise ValueError("height_func must take only one argument, the radius in au.")
+            disk_height = height_func(disk_radius)
 
             # opening angle (rad)
             disk_opening = np.arctan2(disk_height, disk_radius)
