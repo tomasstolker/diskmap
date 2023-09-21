@@ -9,7 +9,7 @@ with open('requirements.txt') as req_txt:
 
 setuptools.setup(
     name='diskmap',
-    version='0.1.5',
+    version='0.2.0',
     description='Scattered light mapping of protoplanetary disks',
     long_description=open('README.rst').read(),
     long_description_content_type='text/x-rst',
