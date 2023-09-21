@@ -1,7 +1,5 @@
-markupsafe==2.0.1
-jinja2==2.11.3
+jupyter
 nbsphinx
 pandoc
-jupyter
 sphinx-automodapi
 sphinx_book_theme

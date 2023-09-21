@@ -3,7 +3,7 @@
 Installation
 ============
 
-``diskmap`` is compatible with `Python <https://www.python.org>`_ versions 3.8/3.9/3.10/3.11 and available through `PyPI <https://pypi.org/project/diskmap/>`_ and `Github <https://github.com/tomasstolker/diskmap>`_.
+``diskmap`` is compatible with `Python <https://www.python.org>`_ versions 3.9/3.10/3.11 and available through `PyPI <https://pypi.org/project/diskmap/>`_ and `Github <https://github.com/tomasstolker/diskmap>`_.
 
 Installation from PyPI
 ----------------------

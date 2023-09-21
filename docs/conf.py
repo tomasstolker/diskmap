@@ -14,13 +14,11 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../'))
 
-
 # -- Project information -----------------------------------------------------
 
 project = 'diskmap'
 copyright = '2020-2023, Tomas Stolker'
 author = 'Tomas Stolker'
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -54,7 +52,6 @@ exclude_patterns = ['_build',
                     '.DS_Store',
                     '.ipynb_checkpoints/*']
 
-
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -74,7 +71,6 @@ html_theme_options = {
     'use_issues_button': True,
     'use_repository_button': True,
     'use_download_button': True,
-    'logo_only': True,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
