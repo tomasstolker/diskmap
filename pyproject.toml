@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "diskmap"
-version = "0.2.0"
+version = "0.3.0"
 authors = [{name = "Tomas Stolker", email = "stolker@strw.leidenuniv.nl"}]
 description = "Scattered light mapping of protoplanetary disks"
 readme = "README.rst"
