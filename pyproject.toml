@@ -1,24 +1,46 @@
 [build-system]
-requires = ["setuptools>=61.0", "setuptools-scm>=8.0"]
+requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "diskmap"
-version = "0.3.0"
 authors = [{name = "Tomas Stolker", email = "stolker@strw.leidenuniv.nl"}]
 description = "Scattered light mapping of protoplanetary disks"
 readme = "README.rst"
 requires-python = ">=3.10,<3.13"
-license = {text = "MIT License"}
+license = "MIT"
 classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "License :: OSI Approved :: MIT License",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: Astronomy",
 ]
-dynamic = ["dependencies"]
+dependencies = [
+    "astropy",
+    "numpy",
+    "scipy",
+    "typeguard",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+docs = [
+    "jupyter",
+    "nbsphinx",
+    "pandoc",
+    "sphinx",
+    "sphinx-automodapi",
+    "sphinx_book_theme",
+]
+test = [
+    "pytest",
+    "pytest-cov",
+    "black",
+    "flake8",
+    "pylint",
+    "pycodestyle",
+]
 
 [project.urls]
 Documentation = "https://diskmap.readthedocs.io"
@@ -28,5 +50,5 @@ Issues = "https://github.com/tomasstolker/diskmap/issues"
 [tool.setuptools]
 packages = ["diskmap"]
 
-[tool.setuptools.dynamic]
-dependencies = {file = "requirements.txt"}
+[tool.setuptools_scm]
+write_to = "diskmap/_version.py"

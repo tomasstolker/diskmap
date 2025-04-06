@@ -2,6 +2,7 @@
 
 help:
 	@echo "pypi - submit to PyPI server"
+	@echo "pypi-check - check the distribution for PyPI"
 	@echo "pypi-test - submit to TestPyPI server"
 	@echo "docs - generate Sphinx documentation"
 	@echo "coverage - check code coverage"
