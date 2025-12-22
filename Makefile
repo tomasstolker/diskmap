@@ -38,6 +38,7 @@ test:
 clean:
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -rf {} +
+	rm -f diskmap/_version.py
 	rm -rf docs/.ipynb_checkpoints
 	rm -rf docs/*.fits
 	rm -rf docs/*.dat

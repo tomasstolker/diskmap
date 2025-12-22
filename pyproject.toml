@@ -7,12 +7,12 @@ name = "diskmap"
 authors = [{name = "Tomas Stolker", email = "stolker@strw.leidenuniv.nl"}]
 description = "Scattered light mapping of protoplanetary disks"
 readme = "README.rst"
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.11,<3.14"
 license = "MIT"
 classifiers = [
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: Astronomy",
 ]
@@ -34,12 +34,12 @@ docs = [
     "sphinx_book_theme",
 ]
 test = [
-    "pytest",
-    "pytest-cov",
     "black",
     "flake8",
-    "pylint",
     "pycodestyle",
+    "pylint",
+    "pytest",
+    "pytest-cov",
 ]
 
 [project.urls]
@@ -52,3 +52,4 @@ packages = ["diskmap"]
 
 [tool.setuptools_scm]
 write_to = "diskmap/_version.py"
+local_scheme = "no-local-version"

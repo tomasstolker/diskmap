@@ -2,6 +2,7 @@
 .DS_Store
 .coverage
 coverage.xml
+diskmap/_version.py
 .pytest_cache/
 docs/_build
 docs/api
