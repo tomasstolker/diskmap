@@ -25,7 +25,7 @@ Contributions are welcome so please consider `forking <https://help.github.com/e
 License
 -------
 
-Copyright 2025 Tomas Stolker
+Copyright 2026 Tomas Stolker
 
 *diskmap* is distributed under the MIT License. See the LICENSE file for the terms and conditions.
 

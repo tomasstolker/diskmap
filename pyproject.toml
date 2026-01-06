@@ -31,7 +31,7 @@ docs = [
     "pandoc",
     "sphinx",
     "sphinx-automodapi",
-    "sphinx_book_theme",
+    "sphinxawesome-theme",
 ]
 test = [
     "black",
