@@ -6,13 +6,13 @@ import math
 import warnings
 
 import numpy as np
-import numpy.ma as ma
+# import numpy.ma as ma
 
 from astropy.io import fits
-from astropy.stats import sigma_clip
+# from astropy.stats import sigma_clip
 from beartype import beartype, typing
 from scipy.interpolate import griddata, interp1d
-from scipy.ndimage import gaussian_filter, median_filter
+# from scipy.ndimage import median_filter
 
 
 class DiskMap:
@@ -21,13 +21,15 @@ class DiskMap:
     """
 
     @beartype
-    def __init__(self,
-                 fitsfile: typing.Union[str, np.ndarray],
-                 pixscale: float,
-                 inclination: float,
-                 pos_angle: float,
-                 distance: float,
-                 image_type: str = 'polarized') -> None:
+    def __init__(
+        self,
+        fitsfile: typing.Union[str, np.ndarray],
+        pixscale: float,
+        inclination: float,
+        pos_angle: float,
+        distance: float,
+        image_type: str = "polarized",
+    ) -> None:
         """
         Parameters
         ----------
@@ -78,25 +80,25 @@ class DiskMap:
                 "The FITS file contains a 3D data cube so using the first image."
             )
 
-            self.image = self.image[
-                0,
-            ]
+            self.image = self.image[0,]
 
         elif self.image.ndim != 2:
             raise ValueError("DiskMap requires a 2D image.")
 
         if self.image.shape[0] != self.image.shape[1]:
             raise ValueError("The dimensions of the image should have the same size.")
-        
-        if self.image.dtype == np.float32 or self.image.dtype == np.dtype('>f4'):
+
+        if self.image.dtype == np.float32 or self.image.dtype == np.dtype(">f4"):
             warnings.warn(
-                "The FITS file data is of type float32, this will be converted to float64"
+                "The FITS file data is of type float32, "
+                "his will be converted to float64"
             )
             self.image = self.image.astype(np.float64)
-            
-        if self.image.dtype != np.float64 and self.image.dtype != np.dtype('>f8'):
+
+        if self.image.dtype != np.float64 and self.image.dtype != np.dtype(">f8"):
             raise ValueError(
-                f"The FITS file data should be either of type float32 or float64"
+                "The FITS file data should be "
+                "either of type float32 or float64"
             )
 
         if image_type not in ["polarized", "total"]:
@@ -144,7 +146,7 @@ class DiskMap:
         power_law: typing.Tuple[float, float, float],
         radius: typing.Tuple[float, float, int] = (1.0, 500.0, 100),
         surface: str = "power-law",
-        height_func: typing.Optional[typing.Callable[[np.ndarray],np.ndarray]] = None,
+        height_func: typing.Optional[typing.Callable[[np.ndarray], np.ndarray]] = None,
         filename: typing.Optional[str] = None,
     ) -> None:
         """
@@ -196,7 +198,7 @@ class DiskMap:
                 x_power: np.ndarray, a_power: float, b_power: float, c_power: float
             ) -> np.ndarray:
 
-                return a_power + b_power * x_power ** c_power
+                return a_power + b_power * x_power**c_power
 
             # midplane radius (au)
             disk_radius = np.linspace(radius[0], radius[1], radius[2])
@@ -208,12 +210,14 @@ class DiskMap:
 
             # opening angle (rad)
             disk_opening = np.arctan2(disk_height, disk_radius)
-            
+
         elif surface == "function":
-            
+
             if height_func is None:
-                raise ValueError("If using surface=='function', you must specify height_func")
-            
+                raise ValueError(
+                    "If using surface=='function', you must specify height_func"
+                )
+
             # midplane radius (au)
             disk_radius = np.linspace(radius[0], radius[1], radius[2])
 
@@ -271,7 +275,7 @@ class DiskMap:
                 x_im.append(x_rot)
                 y_im.append(y_rot)
 
-                r_im.append(math.sqrt(r_item ** 2 + disk_height[i] ** 2))
+                r_im.append(math.sqrt(r_item**2 + disk_height[i] ** 2))
                 p_im.append(p_item)
                 o_im.append(disk_opening[i])
 
@@ -302,7 +306,7 @@ class DiskMap:
             o_sort[i] = o_im[x_index[i]]
             s_sort[i] = s_im[x_index[i]]
 
-        grid_xy = np.zeros((self.grid ** 2, 2))
+        grid_xy = np.zeros((self.grid**2, 2))
 
         count = 0
 
@@ -325,14 +329,14 @@ class DiskMap:
             x_grid = np.linspace(-self.npix / 2 + 0.5, self.npix / 2 - 0.5, self.npix)
             y_grid = np.linspace(-self.npix / 2 + 0.5, self.npix / 2 - 0.5, self.npix)
 
-        elif self.npix % 2 == 1:
+        else:
             x_grid = np.linspace(-(self.npix - 1) / 2, (self.npix - 1) / 2, self.npix)
             y_grid = np.linspace(-(self.npix - 1) / 2, (self.npix - 1) / 2, self.npix)
 
         x_grid *= self.pixscale * self.distance  # (au)
         y_grid *= self.pixscale * self.distance  # (au)
 
-        grid = np.zeros((self.npix ** 2, 2))
+        grid = np.zeros((self.npix**2, 2))
 
         count = 0
 
@@ -454,14 +458,14 @@ class DiskMap:
             x_grid = np.linspace(-self.npix / 2 + 0.5, self.npix / 2 - 0.5, self.npix)
             y_grid = np.linspace(-self.npix / 2 + 0.5, self.npix / 2 - 0.5, self.npix)
 
-        elif self.npix % 2 == 1:
+        else:
             x_grid = np.linspace(-(self.npix - 1) / 2, (self.npix - 1) / 2, self.npix)
             y_grid = np.linspace(-(self.npix - 1) / 2, (self.npix - 1) / 2, self.npix)
 
         x_grid *= self.pixscale * self.distance  # (au)
         y_grid *= self.pixscale * self.distance  # (au)
 
-        grid = np.zeros((self.npix ** 2, 2))
+        grid = np.zeros((self.npix**2, 2))
 
         count = 0
 
@@ -475,14 +479,14 @@ class DiskMap:
         try:
             fit_im = griddata(image_xy, im_disk, grid, method="linear")
 
-        except ValueError:
+        except ValueError as exc:
             raise RuntimeError(
                 "The radius sampling should cover the "
                 "complete field of view of the image. Try "
                 "increasing the outer 'radius' value in "
                 "'map_disk' and have a look at the "
                 "'_radius.fits' output to check for NaNs."
-            )
+            ) from exc
 
         self.im_deproj = np.zeros((self.npix, self.npix))
 
@@ -495,9 +499,11 @@ class DiskMap:
                 count += 1
 
     @beartype
-    def r2_scaling(self,
-                   r_max: float,
-                   mask_planet: typing.Optional[typing.Tuple[int, int, float, float]] = None) -> None:
+    def r2_scaling(
+        self,
+        r_max: float,
+        mask_planet: typing.Optional[typing.Tuple[int, int, float, float]] = None,
+    ) -> None:
         """
         Function for correcting a scattered light image for the r^2
         decrease of the stellar irradiation of the disk surface.
@@ -529,8 +535,8 @@ class DiskMap:
             raise ValueError("Please run 'map_disk' before using 'r2_scaling'.")
 
         if mask_planet is not None:
-            x_grid = np.linspace(-mask_planet[0], self.npix-mask_planet[0], self.npix)
-            y_grid = np.linspace(-mask_planet[1], self.npix-mask_planet[1], self.npix)
+            x_grid = np.linspace(-mask_planet[0], self.npix - mask_planet[0], self.npix)
+            y_grid = np.linspace(-mask_planet[1], self.npix - mask_planet[1], self.npix)
 
             xx_grid, yy_grid = np.meshgrid(x_grid, y_grid)
             rr_grid = np.sqrt(xx_grid**2 + yy_grid**2)
@@ -598,7 +604,7 @@ class DiskMap:
             for j in range(self.npix):
                 if self.radius[i, j] < r_max:
                     if mask_planet is None or rr_grid[i, j] > mask_planet[2]:
-                        self.im_scaled[i, j] = self.radius[i, j]**2 * self.image[i, j]
+                        self.im_scaled[i, j] = self.radius[i, j] ** 2 * self.image[i, j]
 
                     else:
                         self.im_scaled[i, j] = mask_planet[3] * self.image[i, j]
@@ -642,7 +648,7 @@ class DiskMap:
             raise ValueError("Please run 'map_disk' before using 'total_intensity'.")
 
         alpha = np.cos(self.scatter)
-        deg_pol = -pol_max * (alpha ** 2 - 1.0) / (alpha ** 2 + 1.0)
+        deg_pol = -pol_max * (alpha**2 - 1.0) / (alpha**2 + 1.0)
 
         self.stokes_i = self.im_scaled / deg_pol
 
@@ -705,8 +711,8 @@ class DiskMap:
             im_bins.append([])
             scat_bins.append([])
 
-        for i, _ in enumerate(im_select):
-            im_bins[bin_index[i] - 1].append(im_select[i])
+        for i, im_item in enumerate(im_select):
+            im_bins[bin_index[i] - 1].append(im_item)
             scat_bins[bin_index[i] - 1].append(scat_select[i])
 
         angle = []
