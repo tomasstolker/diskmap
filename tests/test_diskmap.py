@@ -96,7 +96,7 @@ class TestDiskmap:
             filename=None,
         )
 
-        mapping.r2_scaling(r_max=30.0, mask_planet=(40, 40, 3, 5.))
+        mapping.r2_scaling(r_max=30.0, mask_planet=(40, 40, 3., 5.))
 
         mapping.write_output(filename="diskmap")
 

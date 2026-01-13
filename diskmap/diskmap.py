@@ -5,16 +5,14 @@ Module with mapping functionalities for protoplanetary disks.
 import math
 import warnings
 
-from typing import List, Optional, Tuple, Union, Callable
-
 import numpy as np
 import numpy.ma as ma
 
 from astropy.io import fits
 from astropy.stats import sigma_clip
+from beartype import beartype, typing
 from scipy.interpolate import griddata, interp1d
 from scipy.ndimage import gaussian_filter, median_filter
-from typeguard import typechecked
 
 
 class DiskMap:
@@ -22,9 +20,9 @@ class DiskMap:
     Class for mapping a surface layer of a protoplanetary disk.
     """
 
-    @typechecked
+    @beartype
     def __init__(self,
-                 fitsfile: Union[str, np.ndarray],
+                 fitsfile: typing.Union[str, np.ndarray],
                  pixscale: float,
                  inclination: float,
                  pos_angle: float,
@@ -140,14 +138,14 @@ class DiskMap:
 
         self.npix = self.image.shape[0]
 
-    @typechecked
+    @beartype
     def map_disk(
         self,
-        power_law: Tuple[float, float, float],
-        radius: Tuple[float, float, int] = (1.0, 500.0, 100),
+        power_law: typing.Tuple[float, float, float],
+        radius: typing.Tuple[float, float, int] = (1.0, 500.0, 100),
         surface: str = "power-law",
-        height_func: Optional[Callable[[np.ndarray],np.ndarray]] = None,
-        filename: Optional[str] = None,
+        height_func: typing.Optional[typing.Callable[[np.ndarray],np.ndarray]] = None,
+        filename: typing.Optional[str] = None,
     ) -> None:
         """
         Function for mapping a scattered light image to a height
@@ -193,7 +191,7 @@ class DiskMap:
 
             # Power-law disk height
 
-            @typechecked
+            @beartype
             def power_law_height(
                 x_power: np.ndarray, a_power: float, b_power: float, c_power: float
             ) -> np.ndarray:
@@ -366,8 +364,8 @@ class DiskMap:
 
                 count += 1
 
-    @typechecked
-    def sort_disk(self) -> Tuple[List[np.float64], np.ndarray]:
+    @beartype
+    def sort_disk(self) -> typing.Tuple[typing.List[np.float64], np.ndarray]:
         """
         Function for creating a list with pixel values and creating a
         2D array with the x and y pixel coordinates.
@@ -431,7 +429,7 @@ class DiskMap:
 
         return im_disk, image_xy
 
-    @typechecked
+    @beartype
     def deproject_disk(self) -> None:
         """
         Function for deprojecting a disk surface based on the mapping
@@ -496,10 +494,10 @@ class DiskMap:
 
                 count += 1
 
-    @typechecked
+    @beartype
     def r2_scaling(self,
                    r_max: float,
-                   mask_planet: Optional[Tuple[int, int, float, float]] = None) -> None:
+                   mask_planet: typing.Optional[typing.Tuple[int, int, float, float]] = None) -> None:
         """
         Function for correcting a scattered light image for the r^2
         decrease of the stellar irradiation of the disk surface.
@@ -612,7 +610,7 @@ class DiskMap:
                     else:
                         self.im_scaled[i, j] = mask_planet[3] * self.image[i, j]
 
-    @typechecked
+    @beartype
     def total_intensity(self, pol_max: float = 1.0) -> None:
         """
         Function for estimating the (stellar irradiation corrected)
@@ -648,8 +646,8 @@ class DiskMap:
 
         self.stokes_i = self.im_scaled / deg_pol
 
-    @typechecked
-    def phase_function(self, radius: Tuple[float, float], n_phase: int):
+    @beartype
+    def phase_function(self, radius: typing.Tuple[float, float], n_phase: int):
         """
         Function for extracting the phase function. If
         ``image_type='polarized'``, the polarized phase function is
@@ -747,7 +745,7 @@ class DiskMap:
         else:
             self.phase = np.column_stack([angle, pol_flux, pol_error])
 
-    @typechecked
+    @beartype
     def write_output(self, filename: str) -> None:
         """
         Function for writing the available results to FITS files.

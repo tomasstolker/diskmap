@@ -18,9 +18,9 @@ classifiers = [
 ]
 dependencies = [
     "astropy",
+    "beartype",
     "numpy",
     "scipy",
-    "typeguard",
 ]
 dynamic = ["version"]
 
