@@ -31,7 +31,7 @@ docs = [
     "pandoc",
     "sphinx",
     "sphinx-automodapi",
-    "sphinxawesome-theme",
+    "sphinxawesome-theme @ git+https://github.com/kai687/sphinxawesome-theme.git",
 ]
 test = [
     "black",
