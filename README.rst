@@ -3,7 +3,8 @@
 
 .. container::
 
-    |PyPI Status| |Python Versions| |CI Status| |Docs Status| |Code Coverage| |Code Quality| |License|
+    | |PyPI Status| |GitHub Release| |Python Versions| |CI Status| |Docs Status|
+    | |License| |Code Coverage| |Code Quality|
 
 *diskmap* is a tool for scattered light mapping of protoplanetary disks. The disk surface is parameterized with a power law profile or read from an input file. The projected radius and scattering angle are then calculated at each pixel. From this, a 3D deprojected image and a stellar irradiation corrected image are computed. Also a polarized scattering phase function is extracted and an total intensity phase function is estimated.
 
@@ -32,6 +33,9 @@ Copyright 2026 Tomas Stolker
 .. |PyPI Status| image:: https://img.shields.io/pypi/v/diskmap
    :target: https://pypi.python.org/pypi/diskmap
 
+.. |GitHub Release| image:: https://img.shields.io/github/v/release/tomasstolker/diskmap
+   :target: https://github.com/tomasstolker/diskmap/releases
+
 .. |Python Versions| image:: https://img.shields.io/pypi/pyversions/diskmap
    :target: https://pypi.python.org/pypi/diskmap
 
@@ -41,11 +45,11 @@ Copyright 2026 Tomas Stolker
 .. |Docs Status| image:: https://img.shields.io/readthedocs/diskmap
    :target: http://diskmap.readthedocs.io
 
+.. |License| image:: https://img.shields.io/github/license/tomasstolker/diskmap
+   :target: https://github.com/tomasstolker/diskmap/blob/main/LICENSE
+
 .. |Code Coverage| image:: https://codecov.io/gh/tomasstolker/diskmap/branch/main/graph/badge.svg?token=LSSCPMJ5JH
    :target: https://codecov.io/gh/tomasstolker/diskmap
 
 .. |Code Quality| image:: https://img.shields.io/codefactor/grade/github/tomasstolker/diskmap
    :target: https://www.codefactor.io/repository/github/tomasstolker/diskmap
-
-.. |License| image:: https://img.shields.io/github/license/tomasstolker/diskmap
-   :target: https://github.com/tomasstolker/diskmap/blob/main/LICENSE
